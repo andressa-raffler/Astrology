@@ -12,6 +12,8 @@ public class UserDTO {
 
     private String name;
     private LocalDate birthDate;
+    private String city;
+    private String state;
     private Astrology astrology;
 }
 

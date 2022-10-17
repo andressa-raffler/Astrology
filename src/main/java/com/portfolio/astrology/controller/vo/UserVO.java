@@ -11,5 +11,7 @@ import java.time.LocalDate;
 public class UserVO {
     private String name;
     private LocalDate birthDate;
+    private String city;
+    private String state;
     private Astrology astrology;
 }

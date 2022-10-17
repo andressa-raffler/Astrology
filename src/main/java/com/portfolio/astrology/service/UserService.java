@@ -1,12 +1,12 @@
 package com.portfolio.astrology.service;
 
 import com.portfolio.astrology.controller.vo.UserVO;
-import com.portfolio.astrology.model.Astrology;
 import com.portfolio.astrology.model.User;
 import com.portfolio.astrology.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +30,8 @@ public class UserService {
                         updatedUser.setId(user.getId());
                         updatedUser.setName(user.getName());
                         updatedUser.setBirthDate(user.getBirthDate());
+                        updatedUser.setCity(user.getCity());
+                        updatedUser.setState(user.getState());
                         updatedUser.setAstrology(astrologyService.getByDate(user.getBirthDate()));
                         return this.userRepository.save(updatedUser);
                 }
@@ -48,4 +50,18 @@ public class UserService {
         public List<User> listAllUsers() {
                 return this.userRepository.findAll();
         }
+
+        public Integer getDay(LocalDate birthDate){
+                return birthDate.getDayOfYear();
+        }
+
+        public Integer getMonth(LocalDate birthDate){
+                return birthDate.getMonthValue();
+        }
+
+        public Integer getYear(LocalDate birthDate){
+                return birthDate.getYear();
+        }
+
+
 }

@@ -22,6 +22,12 @@ public class User {
     @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
+    @Column(nullable = false, length = 100)
+    private String city;
+
+    @Column(nullable = false, length = 100)
+    private String state;
+
     @OneToOne(fetch=FetchType.LAZY)
     private Astrology astrology;
 
