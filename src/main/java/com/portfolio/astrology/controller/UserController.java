@@ -52,7 +52,7 @@ public class UserController {
         user.setBirthDate(userVO.getBirthDate());
         user.setCity(userVO.getCity());
         user.setState(userVO.getState());
-        user.setAstrology(astrologyService.getByDate(userVO.getBirthDate()));
+        user.setAstrology(astrologyService.getChartByDate(userVO.getBirthDate()));
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -67,7 +67,7 @@ public class UserController {
             userDTO.setBirthDate(user.getBirthDate());
             userDTO.setCity(user.getCity());
             userDTO.setState(user.getState());
-            userDTO.setAstrology(astrologyService.getByDate(user.getBirthDate()));
+            userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
             return ResponseEntity.ok(userDTO);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -86,7 +86,7 @@ public class UserController {
                     userDTO.setBirthDate(user.getBirthDate());
                     userDTO.setCity(user.getCity());
                     userDTO.setState(user.getState());
-                    userDTO.setAstrology(astrologyService.getByDate(user.getBirthDate()));
+                    userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
                     return userDTO;
                 }).collect(Collectors.toList());
         return ResponseEntity.ok(userDTOList);
@@ -102,7 +102,7 @@ public class UserController {
             userDTO.setBirthDate(userVO.getBirthDate());
             userDTO.setCity(userVO.getCity());
             userDTO.setState(userVO.getState());
-            userDTO.setAstrology(astrologyService.getByDate(userVO.getBirthDate()));
+            userDTO.setAstrology(astrologyService.getChartByDate(userVO.getBirthDate()));
             return ResponseEntity.ok().body(userDTO);
         }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -32,7 +32,7 @@ public class UserService {
                         updatedUser.setBirthDate(user.getBirthDate());
                         updatedUser.setCity(user.getCity());
                         updatedUser.setState(user.getState());
-                        updatedUser.setAstrology(astrologyService.getByDate(user.getBirthDate()));
+                        updatedUser.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
                         return this.userRepository.save(updatedUser);
                 }
            return null; //melhorar esse retorno
