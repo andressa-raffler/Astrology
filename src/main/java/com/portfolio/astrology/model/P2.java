@@ -1,3 +1,4 @@
+package com.portfolio.astrology.model;
 
 import lombok.Data;
 
@@ -5,6 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@Table(name = "P2")
 public class P2 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

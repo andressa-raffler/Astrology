@@ -18,36 +18,36 @@ public class Planets {
         P0 p0;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p1;
+        P1 p1;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p2;
+        P2 p2;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p3;
+        P3 p3;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p4;
+        P4 p4;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p5;
+        P5 p5;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p6;
+        P6 p6;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p7;
+        P7 p7;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p8;
+        P8 p8;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p9;
+        P9 p9;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p10;
+        P10 p10;
 
         @OneToOne(fetch=FetchType.LAZY)
-        P0 p11;
+        P11 p11;
 
 }

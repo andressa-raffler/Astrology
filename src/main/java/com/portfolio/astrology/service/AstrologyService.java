@@ -26,17 +26,19 @@ public class AstrologyService {
 
     UserService userService;
 
-    public Astrology getChartByDate(Integer birthYear, Integer birthMonth, Integer birthDay, Integer birthHour, Integer birthMinute, String queryLocation,
+    public AstrologyDTO getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute, String queryLocation,
                                     int houses) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Astrology> response = restTemplate.getForEntity(
+        ResponseEntity<AstrologyDTO> response = restTemplate.getForEntity(
                 "https://api.astrologico.org/v1/chart?localdate=" +
                         birthDay + "|" + birthMonth + "|" +
                         birthYear + "|" + birthHour +
                         "|"+ birthMinute + "&querylocation=" + queryLocation +
                         "&houses=" + houses + "&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
-                Astrology.class);
+                AstrologyDTO.class);
         return response.getBody(); //IMPLEMENTAR CHAMADO E CONSUMO DA API APARTIR DA DATA DE NASCIMENTO
+
+        // return retorno.getBody().getResults().get(r2.nextInt(retorno.getBody().getResults().size())).getName();
     }
 }
 

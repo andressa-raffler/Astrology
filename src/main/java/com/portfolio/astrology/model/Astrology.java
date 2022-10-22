@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "Astrology")
 public class Astrology {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

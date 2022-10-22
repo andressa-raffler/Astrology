@@ -47,8 +47,7 @@ public class UserController {
 
     @PostMapping("/save-new-user")
     public ResponseEntity<String>saveNewUser (@Valid @RequestBody UserVO userVO){
-        User user = new User();
-        setUserFromUserVO(userVO, user);
+        User user = setUserFromUserVO(userVO);
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -126,7 +125,8 @@ public class UserController {
         userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
                 user.getCity()+" "+ user.getState(), 15));
     }
-    private void setUserFromUserVO(UserVO userVO, User user) {
+    private User setUserFromUserVO(UserVO userVO) {
+        User user = new User();
         user.setName(userVO.getName());
         user.setBirthDate(userVO.getBirthDate());
         user.setBirthHour(userVO.getBirthHour());
@@ -135,5 +135,6 @@ public class UserController {
         user.setState(userVO.getState());
         user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
                 user.getCity()+" "+ user.getState(), 15));
+        return user;
     }
 }
