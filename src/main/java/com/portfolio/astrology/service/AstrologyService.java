@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,38 +24,19 @@ public class AstrologyService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
     UserService userService;
-    String urlPagina = getPageUrl();
-    public Astrology getChartByDate(LocalDate birthDate, String queryLocation,
-                                    int hosues) {
+
+    public Astrology getChartByDate(Integer birthYear, Integer birthMonth, Integer birthDay, Integer birthHour, Integer birthMinute, String queryLocation,
+                                    int houses) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<AstrologyDTO>response = restTemplate.getForEntity(
+        ResponseEntity<Astrology> response = restTemplate.getForEntity(
                 "https://api.astrologico.org/v1/chart?localdate=" +
-                userService.getDay(birthDate) + "|" + userService.getMonth(birthDate)+ "|" +
-                        userService.getYear(birthDate) + "|" + userService.getHour(birthDate) +
-                        "|"userService.getMinute(birthDate) + "&querylocation=" +
-                        cidade" "estado +
-                "&houses="house"&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
-                AstrologyDTO.class);
-
-       // private final WebClient webClient;
-       // public Flux<>
-
-
-
-        return new Astrology(); //IMPLEMENTAR CHAMADO E CONSUMO DA API APARTIR DA DATA DE NASCIMENTO
-
-
-
-    }
-
-    public String getPageUrl(){
-        assert userService != null;
-        String url = "https://api.astrologico.org/v1/chart?localdate=" +
-               userService.getDay()"|" userService.getMonth()"|"userService.getYear()"|"hora"|"minuto"&querylocation="cidade" "estado+
-            "&houses="house"&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46";
-
+                        birthDay + "|" + birthMonth + "|" +
+                        birthYear + "|" + birthHour +
+                        "|"+ birthMinute + "&querylocation=" + queryLocation +
+                        "&houses=" + houses + "&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
+                Astrology.class);
+        return response.getBody(); //IMPLEMENTAR CHAMADO E CONSUMO DA API APARTIR DA DATA DE NASCIMENTO
     }
 }
 

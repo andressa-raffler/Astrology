@@ -30,9 +30,12 @@ public class UserService {
                         updatedUser.setId(user.getId());
                         updatedUser.setName(user.getName());
                         updatedUser.setBirthDate(user.getBirthDate());
+                        updatedUser.setBirthHour(user.getBirthHour());
+                        updatedUser.setBirthMinute(user.getBirthMinute());
                         updatedUser.setCity(user.getCity());
                         updatedUser.setState(user.getState());
-                        updatedUser.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
+                        updatedUser.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                                user.getCity()+" "+ user.getState(), 15));
                         return this.userRepository.save(updatedUser);
                 }
            return null; //melhorar esse retorno
@@ -41,7 +44,6 @@ public class UserService {
         public Optional<User> findById(Long id){
                 return this.userRepository.findById(id);
         }
-
 
         public void deleteUserById(Long id) {
                 this.userRepository.deleteById(id);
@@ -62,6 +64,5 @@ public class UserService {
         public Integer getYear(LocalDate birthDate){
                 return birthDate.getYear();
         }
-
 
 }

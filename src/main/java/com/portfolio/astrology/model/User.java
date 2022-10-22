@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+
 @Getter
 @Setter
 @Entity
@@ -22,6 +23,12 @@ public class User {
     @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
+    @Column(nullable = false, length = 2)
+    private Integer birthHour;
+
+    @Column(nullable = false, length = 2)
+    private Integer birthMinute;
+
     @Column(nullable = false, length = 100)
     private String city;
 
@@ -31,4 +38,14 @@ public class User {
     @OneToOne(fetch=FetchType.LAZY)
     private Astrology astrology;
 
+    public int getBirthYear(LocalDate birthDate) {
+       return birthDate.getYear();
+    }
+
+    public int getBirthMonth(LocalDate birthDate) {
+        return birthDate.getMonthValue();
+    }
+    public int getBirthDay(LocalDate birthDate) {
+        return birthDate.getDayOfMonth();
+    }
 }

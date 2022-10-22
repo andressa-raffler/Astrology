@@ -48,14 +48,11 @@ public class UserController {
     @PostMapping("/save-new-user")
     public ResponseEntity<String>saveNewUser (@Valid @RequestBody UserVO userVO){
         User user = new User();
-        user.setName(userVO.getName());
-        user.setBirthDate(userVO.getBirthDate());
-        user.setCity(userVO.getCity());
-        user.setState(userVO.getState());
-        user.setAstrology(astrologyService.getChartByDate(userVO.getBirthDate()));
+        setUserFromUserVO(userVO, user);
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 
     @GetMapping("get-user-by-id/{id}")
     public ResponseEntity<UserDTO>findUserById(@PathVariable("id") Long id){
@@ -63,15 +60,12 @@ public class UserController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             UserDTO userDTO = new UserDTO();
-            userDTO.setName(user.getName());
-            userDTO.setBirthDate(user.getBirthDate());
-            userDTO.setCity(user.getCity());
-            userDTO.setState(user.getState());
-            userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
+            setUserFromUserDTO(user, userDTO);
             return ResponseEntity.ok(userDTO);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
     @GetMapping("get-all-users")
     public ResponseEntity<List<UserDTO>> listAllUsers(){
@@ -82,11 +76,7 @@ public class UserController {
         List<UserDTO> userDTOList = userList.stream()
                 .map(user -> {
                     UserDTO userDTO = new UserDTO();
-                    userDTO.setName(user.getName());
-                    userDTO.setBirthDate(user.getBirthDate());
-                    userDTO.setCity(user.getCity());
-                    userDTO.setState(user.getState());
-                    userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthDate()));
+                    setUserFromUserDTO(user, userDTO);
                     return userDTO;
                 }).collect(Collectors.toList());
         return ResponseEntity.ok(userDTOList);
@@ -98,15 +88,12 @@ public class UserController {
         User user = this.userService.updateUserById(id, userVO);
         if(Objects.nonNull(user)){
             UserDTO userDTO = new UserDTO();
-            userDTO.setName(userVO.getName());
-            userDTO.setBirthDate(userVO.getBirthDate());
-            userDTO.setCity(userVO.getCity());
-            userDTO.setState(userVO.getState());
-            userDTO.setAstrology(astrologyService.getChartByDate(userVO.getBirthDate()));
+            setUserVOFromUserDTO(userVO, user, userDTO);
             return ResponseEntity.ok().body(userDTO);
         }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
     @DeleteMapping("delete-user-by-id/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
@@ -119,4 +106,34 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    private void setUserFromUserDTO(User user, UserDTO userDTO) {
+        userDTO.setName(user.getName());
+        userDTO.setBirthDate(user.getBirthDate());
+        userDTO.setBirthHour(user.getBirthHour());
+        userDTO.setBirthMinute(user.getBirthMinute());
+        userDTO.setCity(user.getCity());
+        userDTO.setState(user.getState());
+        userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                user.getCity()+" "+ user.getState(), 15));
+    }
+    private void setUserVOFromUserDTO(UserVO userVO, User user, UserDTO userDTO) {
+        userDTO.setName(userVO.getName());
+        userDTO.setBirthDate(userVO.getBirthDate());
+        userDTO.setBirthHour(userVO.getBirthHour());
+        userDTO.setBirthMinute(userVO.getBirthMinute());
+        userDTO.setCity(userVO.getCity());
+        userDTO.setState(userVO.getState());
+        userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                user.getCity()+" "+ user.getState(), 15));
+    }
+    private void setUserFromUserVO(UserVO userVO, User user) {
+        user.setName(userVO.getName());
+        user.setBirthDate(userVO.getBirthDate());
+        user.setBirthHour(userVO.getBirthHour());
+        user.setBirthMinute(userVO.getBirthMinute());
+        user.setCity(userVO.getCity());
+        user.setState(userVO.getState());
+        user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                user.getCity()+" "+ user.getState(), 15));
+    }
 }
