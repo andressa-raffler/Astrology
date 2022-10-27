@@ -47,18 +47,15 @@ public class UserController {
 
     })
 
-    @PostMapping("/save-new-user")
-    public ResponseEntity<Astrology> saveNewUser(@Valid @RequestBody String name,
-                                                 LocalDate birthDate, int birthHour,
-                                                 int birthMinute, String city,
-                                                 String state) {
-        User user = new User();
-        user.setName(name);
-        user.setBirthDate(birthDate);
-        user.setBirthHour(birthHour);
-        user.setBirthMinute(birthMinute);
-        user.setCity(city);
-        user.setState(state);
+    @GetMapping("/save-new-user")
+    public ResponseEntity<Astrology> saveNewUser( @RequestBody User user) {
+//        User user = new User();
+//        user.setName(name);
+//        user.setBirthDate(birthDate);
+//        user.setBirthHour(birthHour);
+//        user.setBirthMinute(birthMinute);
+//        user.setCity(city);
+//        user.setState(state);
         user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()), user.getBirthMonth(user.getBirthDate()), user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
                 user.getCity() + " " + user.getState(), 15));
         userService.saveUser(user);

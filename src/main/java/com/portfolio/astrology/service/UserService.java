@@ -5,7 +5,6 @@ import com.portfolio.astrology.model.User;
 import com.portfolio.astrology.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,16 +50,16 @@ public class UserService {
                 return this.userRepository.findAll();
         }
 
-        public Integer getDay(LocalDate birthDate){
-                return birthDate.getDayOfYear();
-        }
-
-        public Integer getMonth(LocalDate birthDate){
-                return birthDate.getMonthValue();
-        }
-
-        public Integer getYear(LocalDate birthDate){
-                return birthDate.getYear();
-        }
+//        public Integer getDay(LocalDate birthDate){
+//                return birthDate.getDayOfYear();
+//        }
+//
+//        public Integer getMonth(LocalDate birthDate){
+//                return birthDate.getMonthValue();
+//        }
+//
+//        public Integer getYear(LocalDate birthDate){
+//                return birthDate.getYear();
+//        }
 
 }
