@@ -24,10 +24,10 @@ public class User {
     private LocalDate birthDate;
 
     @Column(nullable = false, length = 2)
-    private Integer birthHour;
+    private int birthHour;
 
     @Column(nullable = false, length = 2)
-    private Integer birthMinute;
+    private int birthMinute;
 
     @Column(nullable = false, length = 100)
     private String city;
@@ -48,4 +48,7 @@ public class User {
     public int getBirthDay(LocalDate birthDate) {
         return birthDate.getDayOfMonth();
     }
+
+
+
 }
