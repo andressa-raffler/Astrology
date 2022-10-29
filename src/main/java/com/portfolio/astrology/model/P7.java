@@ -17,10 +17,10 @@ public class P7 {
     String name;
 
     @Column(nullable = false, length = 100)
-    Long longitude;//": 92.15322965365729
+    Float longitude;//": 92.15322965365729
 
     @Column(nullable = false, length = 100)
-    Long longitudeSpeed;//": 0.9535995114940861
+    Float longitudeSpeed;//": 0.9535995114940861
 
 
 }
