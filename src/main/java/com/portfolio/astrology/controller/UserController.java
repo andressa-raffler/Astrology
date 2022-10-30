@@ -58,7 +58,7 @@ public class UserController {
             User user = optionalUser.get();
             return ResponseEntity.ok(user);
         }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

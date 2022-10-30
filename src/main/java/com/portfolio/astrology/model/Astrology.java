@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,16 +13,10 @@ import javax.persistence.*;
 @Table(name = "astrology")
 public class Astrology {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    private Planets planets;
-
-
-
-
-
-
+    @OneToMany(mappedBy = "astrology")
+    private List<Planet> planets;
 
 }
