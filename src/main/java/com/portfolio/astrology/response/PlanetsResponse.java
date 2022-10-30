@@ -1,12 +1,14 @@
 package com.portfolio.astrology.response;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PlanetsResponse {
+    P0Response P0;
     P1Response P1;
     P2Response P2;
     P3Response P3;
@@ -16,6 +18,5 @@ public class PlanetsResponse {
     P7Response P7;
     P8Response P8;
     P9Response P9;
-    P10Response P10;
     P11Response P11;
 }

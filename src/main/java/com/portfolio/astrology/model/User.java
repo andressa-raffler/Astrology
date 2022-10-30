@@ -35,7 +35,7 @@ public class User {
     @Column(nullable = false, length = 100)
     private String state;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private Astrology astrology;
 
     public int getBirthYear(LocalDate birthDate) {

@@ -2,7 +2,6 @@ package com.portfolio.astrology.controller;
 
 
 import com.portfolio.astrology.model.*;
-import com.portfolio.astrology.response.AstrologyResponse;
 import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,10 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-
-import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,13 +44,6 @@ public class UserController {
 
     @GetMapping("/save-new-user")
     public ResponseEntity<Astrology> saveNewUser( @RequestBody User user) {
-//        User user = new User();
-//        user.setName(name);
-//        user.setBirthDate(birthDate);
-//        user.setBirthHour(birthHour);
-//        user.setBirthMinute(birthMinute);
-//        user.setCity(city);
-//        user.setState(state);
         user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()), user.getBirthMonth(user.getBirthDate()), user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
                 user.getCity() + " " + user.getState(), 15));
         userService.saveUser(user);

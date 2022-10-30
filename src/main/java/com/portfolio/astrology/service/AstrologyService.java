@@ -44,8 +44,15 @@ public class AstrologyService {
 
     public Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
         Astrology astrology = new Astrology();
-        astrology.setStatus(astrologyResponse.getStatusResponse());
+  //      astrology.setStatus(astrologyResponse.getStatusResponse());
         Planets planets = new Planets();
+
+        P0 p0 = new P0();
+        p0.setName(astrologyResponse.getPlanets().getP0().getName());
+        p0.setLongitude(astrologyResponse.getPlanets().getP0().getLongitude());
+        p0.setLongitudeSpeed(astrologyResponse.getPlanets().getP0().getLongitudeSpeed());
+        planets.setP0(p0);
+
 
         P1 p1 = new P1();
         p1.setName(astrologyResponse.getPlanets().getP1().getName());
@@ -101,11 +108,6 @@ public class AstrologyService {
         p9.setLongitudeSpeed(astrologyResponse.getPlanets().getP9().getLongitudeSpeed());
         planets.setP9(p9);
 
-        P10 p10 = new P10();
-        p10.setName(astrologyResponse.getPlanets().getP10().getName());
-        p10.setLongitude(astrologyResponse.getPlanets().getP10().getLongitude());
-        p10.setLongitudeSpeed(astrologyResponse.getPlanets().getP10().getLongitudeSpeed());
-        planets.setP10(p10);
 
         P11 p11 = new P11();
         p11.setName(astrologyResponse.getPlanets().getP11().getName());
