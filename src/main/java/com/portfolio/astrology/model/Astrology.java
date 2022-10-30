@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "Astrology")
+@Table(name = "astrology")
 public class Astrology {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +17,8 @@ public class Astrology {
 
     @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private Planets planets;
+
+
 
 
 
