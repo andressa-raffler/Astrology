@@ -15,9 +15,17 @@ public class Astrology {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    private Planets planets;
+    @Column(name = "planet_number", nullable = false)
+    private int planetNumber;
 
+    @Column(name = "planet_name", nullable = false)
+    private String planetName;
+
+    @Column(name = "longitude", nullable = false, length = 100)
+    Long longitude;
+
+    @Column(name = "longitude_speed", nullable = false, length = 100)
+    Long longitude;
 
 
 
