@@ -19,4 +19,6 @@ public class Astrology {
     @OneToMany(mappedBy = "astrology")
     private List<Planet> planets;
 
+
+
 }

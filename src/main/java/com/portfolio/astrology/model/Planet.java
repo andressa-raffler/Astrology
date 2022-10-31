@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Planet")
+@Table(name = "planet")
 public class Planet {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,8 +21,7 @@ public class Planet {
     @Column(nullable = false, length = 100)
     Long longitudeSpeed;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "astrology_id")
+    @ManyToOne(fetch=FetchType.LAZY)
     private Astrology astrology;
 
 }

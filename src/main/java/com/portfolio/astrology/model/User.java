@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "Users")
+@Table(name = "user")
 public class User {
 
     @Id
@@ -37,6 +37,7 @@ public class User {
 
     @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private Astrology astrology;
+
 
     public int getBirthYear(LocalDate birthDate) {
        return birthDate.getYear();
