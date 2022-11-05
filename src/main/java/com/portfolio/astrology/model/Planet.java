@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "planet")
 public class Planet {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -22,6 +22,7 @@ public class Planet {
     Long longitudeSpeed;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="astrology_id",  referencedColumnName = "id")
     private Astrology astrology;
 
 }

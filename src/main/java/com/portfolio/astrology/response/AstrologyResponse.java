@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Data
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 
-public class AstrologyResponse implements Serializable {
+public class AstrologyResponse {
     PlanetsResponse planets;
+
 }

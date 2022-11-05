@@ -13,10 +13,10 @@ import java.util.List;
 @Table(name = "astrology")
 public class Astrology {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "astrology")
+    @OneToMany(mappedBy = "astrology", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Planet> planets;
 
 
