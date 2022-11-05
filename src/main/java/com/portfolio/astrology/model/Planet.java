@@ -1,13 +1,15 @@
 package com.portfolio.astrology.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
 @Table(name = "planet")
-public class Planet {
+public class Planet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,8 +23,11 @@ public class Planet {
     @Column(nullable = false, length = 100)
     Long longitudeSpeed;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="astrology_id",  referencedColumnName = "id")
+    @JsonIgnore
     private Astrology astrology;
+
+
 
 }

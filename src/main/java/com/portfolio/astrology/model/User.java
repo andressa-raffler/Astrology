@@ -4,14 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class User implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
@@ -35,7 +36,7 @@ public class User {
     @Column(nullable = false, length = 100)
     private String state;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Astrology astrology;
 
 

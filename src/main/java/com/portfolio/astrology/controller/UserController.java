@@ -50,6 +50,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("get-user-by-name/{name}")
+    public ResponseEntity<User>findUserByName(@PathVariable("name") String name){
+        Optional<User> optionalUser = this.userService.findByName(name);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.ok(user); //ESSE PONTO TA DANDO ERRO, MELHORAR O RETORNO
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
 
     @GetMapping("get-user-by-id/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
@@ -58,7 +69,7 @@ public class UserController {
             User user = optionalUser.get();
             return ResponseEntity.ok(user);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
@@ -72,11 +83,20 @@ public class UserController {
     }
 
 
-    @PutMapping("update-user-by-id/{id}")
+    @PostMapping("update-user-by-id/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
         if (Objects.nonNull(user)) {
             User updatedUser = this.userService.updateUserById(id, user);
-            return ResponseEntity.ok().body(updatedUser);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("update-user-by-name/{name}")
+    public ResponseEntity<String> updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
+        if (Objects.nonNull(user)) {
+            User updatedUser = this.userService.updateUserByName(name, user);
+            return ResponseEntity.ok("user updated!");
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

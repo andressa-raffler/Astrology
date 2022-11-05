@@ -23,25 +23,29 @@ public class UserService {
         public User updateUserById(Long id, User updatedUser){
                 Optional<User> optionalUser = this.userRepository.findById(id);
                 if(optionalUser.isPresent()){
-                        User user = optionalUser.get();
-                        updatedUser.setId(user.getId());
-                        updatedUser.setName(user.getName());
-                        updatedUser.setBirthDate(user.getBirthDate());
-                        updatedUser.setBirthHour(user.getBirthHour());
-                        updatedUser.setBirthMinute(user.getBirthMinute());
-                        updatedUser.setCity(user.getCity());
-                        updatedUser.setState(user.getState());
-                        updatedUser.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
-                                user.getCity()+" "+ user.getState(), 15));
-                        return this.userRepository.save(updatedUser);
+                        getUserFromOptionalUser(updatedUser, optionalUser);
+                        return this.userRepository.saveAndFlush(updatedUser);
                 }
            return null; //melhorar esse retorno
+        }
+
+
+        public User updateUserByName(String name, User updatedUser) {
+                Optional<User> optionalUser = this.userRepository.findByName(name);
+                if(optionalUser.isPresent()){
+                        getUserFromOptionalUser(updatedUser, optionalUser);
+                        return this.userRepository.save(updatedUser);
+                }
+                return null; //melhorar esse retorno
         }
 
         public Optional<User> findById(Long id){
                 return this.userRepository.findById(id);
         }
 
+        public Optional<User> findByName(String name) {
+                return this.userRepository.findByName(name);
+        }
         public void deleteUserById(Long id) {
                 this.userRepository.deleteById(id);
         }
@@ -50,16 +54,16 @@ public class UserService {
                 return this.userRepository.findAll();
         }
 
-//        public Integer getDay(LocalDate birthDate){
-//                return birthDate.getDayOfYear();
-//        }
-//
-//        public Integer getMonth(LocalDate birthDate){
-//                return birthDate.getMonthValue();
-//        }
-//
-//        public Integer getYear(LocalDate birthDate){
-//                return birthDate.getYear();
-//        }
-
+        private void getUserFromOptionalUser(User updatedUser, Optional<User> optionalUser) {
+                User user = optionalUser.get();
+                updatedUser.setId(user.getId());
+                updatedUser.setName(user.getName());
+                updatedUser.setBirthDate(user.getBirthDate());
+                updatedUser.setBirthHour(user.getBirthHour());
+                updatedUser.setBirthMinute(user.getBirthMinute());
+                updatedUser.setCity(user.getCity());
+                updatedUser.setState(user.getState());
+                updatedUser.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                        user.getCity()+" "+ user.getState(), 15));
+        }
 }

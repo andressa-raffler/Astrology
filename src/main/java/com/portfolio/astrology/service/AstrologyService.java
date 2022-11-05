@@ -47,77 +47,74 @@ public class AstrologyService {
     public Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
         Astrology astrology = new Astrology();
   //      astrology.setStatus(astrologyResponse.getStatusResponse());
-        List<Planet> planets = new ArrayList<Planet>();
 
         Planet p0 = new Planet();
         p0.setName(astrologyResponse.getPlanets().getP0().getName());
         p0.setLongitude(astrologyResponse.getPlanets().getP0().getLongitude());
         p0.setLongitudeSpeed(astrologyResponse.getPlanets().getP0().getLongitudeSpeed());
-        planets.add(0,p0);
-
+        astrology.addToPlanets(p0);
 
         Planet p1 = new Planet();
         p1.setName(astrologyResponse.getPlanets().getP1().getName());
         p1.setLongitude(astrologyResponse.getPlanets().getP1().getLongitude());
         p1.setLongitudeSpeed(astrologyResponse.getPlanets().getP1().getLongitudeSpeed());
-        planets.add(1,p1);
+        astrology.addToPlanets(p1);
 
         Planet p2 = new Planet();
         p2.setName(astrologyResponse.getPlanets().getP2().getName());
         p2.setLongitude(astrologyResponse.getPlanets().getP2().getLongitude());
         p2.setLongitudeSpeed(astrologyResponse.getPlanets().getP2().getLongitudeSpeed());
-        planets.add(2,p2);
+        astrology.addToPlanets(p2);
 
         Planet p3 = new Planet();
         p3.setName(astrologyResponse.getPlanets().getP3().getName());
         p3.setLongitude(astrologyResponse.getPlanets().getP3().getLongitude());
         p3.setLongitudeSpeed(astrologyResponse.getPlanets().getP3().getLongitudeSpeed());
-        planets.add(3,p3);
+        astrology.addToPlanets(p3);
 
         Planet p4 = new Planet();
         p4.setName(astrologyResponse.getPlanets().getP4().getName());
         p4.setLongitude(astrologyResponse.getPlanets().getP4().getLongitude());
         p4.setLongitudeSpeed(astrologyResponse.getPlanets().getP4().getLongitudeSpeed());
-        planets.add(4,p4);
+        astrology.addToPlanets(p4);
 
         Planet p5 = new Planet();
         p5.setName(astrologyResponse.getPlanets().getP5().getName());
         p5.setLongitude(astrologyResponse.getPlanets().getP5().getLongitude());
         p5.setLongitudeSpeed(astrologyResponse.getPlanets().getP5().getLongitudeSpeed());
-        planets.add(5,p5);
+        astrology.addToPlanets(p5);
 
         Planet p6 = new Planet();
         p6.setName(astrologyResponse.getPlanets().getP6().getName());
         p6.setLongitude(astrologyResponse.getPlanets().getP6().getLongitude());
         p6.setLongitudeSpeed(astrologyResponse.getPlanets().getP6().getLongitudeSpeed());
-        planets.add(6,p6);
+        astrology.addToPlanets(p6);
 
         Planet p7 = new Planet();
         p7.setName(astrologyResponse.getPlanets().getP7().getName());
         p7.setLongitude(astrologyResponse.getPlanets().getP7().getLongitude());
         p7.setLongitudeSpeed(astrologyResponse.getPlanets().getP7().getLongitudeSpeed());
-        planets.add(7,p7);
+        astrology.addToPlanets(p7);
 
         Planet p8  = new Planet();
         p8.setName(astrologyResponse.getPlanets().getP8().getName());
         p8.setLongitude(astrologyResponse.getPlanets().getP8().getLongitude());
         p8.setLongitudeSpeed(astrologyResponse.getPlanets().getP8().getLongitudeSpeed());
-        planets.add(8,p8);
+        astrology.addToPlanets(p8);
 
         Planet p9 = new Planet();
         p9.setName(astrologyResponse.getPlanets().getP9().getName());
         p9.setLongitude(astrologyResponse.getPlanets().getP9().getLongitude());
         p9.setLongitudeSpeed(astrologyResponse.getPlanets().getP9().getLongitudeSpeed());
-        planets.add(9,p9);
+        astrology.addToPlanets(p9);
 
 
         Planet p11 = new Planet();
         p11.setName(astrologyResponse.getPlanets().getP11().getName());
         p11.setLongitude(astrologyResponse.getPlanets().getP11().getLongitude());
         p11.setLongitudeSpeed(astrologyResponse.getPlanets().getP11().getLongitudeSpeed());
-        planets.add(10,p11);
+        astrology.addToPlanets(p11);
 
-        astrology.setPlanets(planets);
 
         return astrology;
     }
