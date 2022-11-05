@@ -93,10 +93,10 @@ public class UserController {
     }
 
     @PostMapping("update-user-by-name/{name}")
-    public ResponseEntity<String> updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
+    public ResponseEntity<User> updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
         if (Objects.nonNull(user)) {
             User updatedUser = this.userService.updateUserByName(name, user);
-            return ResponseEntity.ok("user updated!");
+            return ResponseEntity.ok(updatedUser);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -113,17 +113,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping("delete-user-by-name/{name}")
+    public ResponseEntity<String> deleteUserByName(@PathVariable("name") String name) {
+        Optional<User> optionalUser = this.userService.findByName(name);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            this.userService.deleteUserById(user.getId());
+            return ResponseEntity.ok("User removed");
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
-//    private void setUserFromUserDTO(User user, UserDTO userDTO) {
-//        userDTO.setName(user.getName());
-//        userDTO.setBirthDate(user.getBirthDate());
-//        userDTO.setBirthHour(user.getBirthHour());
-//        userDTO.setBirthMinute(user.getBirthMinute());
-//        userDTO.setCity(user.getCity());
-//        userDTO.setState(user.getState());
-//        userDTO.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()),user.getBirthMonth(user.getBirthDate()),user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
-//                user.getCity()+" "+ user.getState(), 15));
-//    }
+
 
 
 }
