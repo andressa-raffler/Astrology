@@ -60,8 +60,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-
-
     @GetMapping("get-user-by-id/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
         Optional<User> optionalUser = this.userService.findById(id);
@@ -72,7 +70,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-
     @GetMapping("get-all-users")
     public ResponseEntity<List<User>> listAllUsers() {
         List<User> userList = this.userService.listAllUsers();
@@ -82,6 +79,16 @@ public class UserController {
         return ResponseEntity.ok(userList);
     }
 
+//    @GetMapping("get-chart-by-name/{name}")
+//    public ResponseEntity<User>getChartByName(@PathVariable("name") String name){
+//        Optional<User> optionalUser = this.userService.findByName(name);
+//        if (optionalUser.isPresent()) {
+//            User user = this.userService.getChartByName(String name);
+//
+//            return ResponseEntity.ok(user);
+//        }
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
 
     @PostMapping("update-user-by-id/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
@@ -100,7 +107,6 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
     @DeleteMapping("delete-user-by-id/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id) {

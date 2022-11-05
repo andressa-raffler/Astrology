@@ -4,6 +4,8 @@ package com.portfolio.astrology.service;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.response.AstrologyResponse;
+import com.portfolio.astrology.response.HouseXResponse;
+import com.portfolio.astrology.response.Houses2Response;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -115,6 +117,83 @@ public class AstrologyService {
         p11.setLongitudeSpeed(astrologyResponse.getPlanets().getP11().getLongitudeSpeed());
         astrology.addToPlanets(p11);
 
+        House house1 = new House();
+        house1.setName("House 1");
+        house1.setLongitude(astrologyResponse.getHouses().getHouses().getHouse1().getLongitude());
+        house1.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse1().getLongitudeSpeed());
+        astrology.addToHouses(house1);
+
+        House house2 = new House();
+        house2.setName("House 2");
+        house2.setLongitude(astrologyResponse.getHouses().getHouses().getHouse2().getLongitude());
+        house2.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse2().getLongitudeSpeed());
+        astrology.addToHouses(house2);
+
+        House house3 = new House();
+        house3.setName("House 3");
+        house3.setLongitude(astrologyResponse.getHouses().getHouses().getHouse3().getLongitude());
+        house3.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse3().getLongitudeSpeed());
+        astrology.addToHouses(house3);
+
+        House house4 = new House();
+        house4.setName("House 4");
+        house4.setLongitude(astrologyResponse.getHouses().getHouses().getHouse4().getLongitude());
+        house4.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse4().getLongitudeSpeed());
+        astrology.addToHouses(house4);
+
+        House house5 = new House();
+        house5.setName("House 5");
+        house5.setLongitude(astrologyResponse.getHouses().getHouses().getHouse5().getLongitude());
+        house5.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse5().getLongitudeSpeed());
+        astrology.addToHouses(house5);
+
+        House house6 = new House();
+        house6.setName("House 6");
+        house6.setLongitude(astrologyResponse.getHouses().getHouses().getHouse6().getLongitude());
+        house6.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse6().getLongitudeSpeed());
+        astrology.addToHouses(house6);
+
+        House house7 = new House();
+        house7.setName("House 7");
+        house7.setLongitude(astrologyResponse.getHouses().getHouses().getHouse7().getLongitude());
+        house7.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse7().getLongitudeSpeed());
+        astrology.addToHouses(house7);
+
+        House house8 = new House();
+        house8.setName("House 8");
+        house8.setLongitude(astrologyResponse.getHouses().getHouses().getHouse8().getLongitude());
+        house8.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse8().getLongitudeSpeed());
+        astrology.addToHouses(house8);
+
+        House house9 = new House();
+        house9.setName("House 9");
+        house9.setLongitude(astrologyResponse.getHouses().getHouses().getHouse9().getLongitude());
+        house9.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse9().getLongitudeSpeed());
+        astrology.addToHouses(house9);
+
+        House house10 = new House();
+        house10.setName("House 10");
+        house10.setLongitude(astrologyResponse.getHouses().getHouses().getHouse10().getLongitude());
+        house10.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse10().getLongitudeSpeed());
+        astrology.addToHouses(house10);
+
+        House house11 = new House();
+        house11.setName("House 11");
+        house11.setLongitude(astrologyResponse.getHouses().getHouses().getHouse11().getLongitude());
+        house11.setLongitudeSpeed(astrologyResponse.getHouses().getHouses().getHouse11().getLongitudeSpeed());
+        astrology.addToHouses(house11);
+
+        House ascendant = new House();
+        ascendant.setName("Ascendant");
+        ascendant.setLongitude(astrologyResponse.getHouses().getAscendant().getLongitude());
+        ascendant.setLongitudeSpeed(astrologyResponse.getHouses().getAscendant().getLongitudeSpeed());
+        astrology.addToHouses(ascendant);
+
+        House mc = new House();
+        ascendant.setName("Mid-heaven");
+        mc.setLongitude(astrologyResponse.getHouses().getMc().getLongitude());
+        mc.setLongitudeSpeed(astrologyResponse.getHouses().getMc().getLongitudeSpeed());
+        astrology.addToHouses(mc);
 
         return astrology;
     }
