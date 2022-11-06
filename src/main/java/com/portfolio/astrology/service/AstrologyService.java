@@ -4,8 +4,6 @@ package com.portfolio.astrology.service;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.response.AstrologyResponse;
-import com.portfolio.astrology.response.HouseXResponse;
-import com.portfolio.astrology.response.Houses2Response;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Service
-@Slf4j
+//@Slf4j
 public class AstrologyService {
 
 
@@ -190,7 +185,7 @@ public class AstrologyService {
         astrology.addToHouses(ascendant);
 
         House mc = new House();
-        ascendant.setName("Mid-heaven");
+        mc.setName("Mid-heaven");
         mc.setLongitude(astrologyResponse.getHouses().getMc().getLongitude());
         mc.setLongitudeSpeed(astrologyResponse.getHouses().getMc().getLongitudeSpeed());
         astrology.addToHouses(mc);
@@ -200,7 +195,3 @@ public class AstrologyService {
 
 }
 
-//83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46
-//API Key
-
-//https://br.astrologico.org/software/api#examples

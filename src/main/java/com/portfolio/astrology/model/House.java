@@ -14,7 +14,7 @@ public class House implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column( length = 100)
     String name;
 
     @Column(nullable = false, length = 100)
