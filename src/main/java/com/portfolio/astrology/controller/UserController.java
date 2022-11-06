@@ -1,8 +1,7 @@
 package com.portfolio.astrology.controller;
 
-import com.portfolio.astrology.controller.dto.UserDTO;
-import com.portfolio.astrology.controller.vo.UserVO;
-import com.portfolio.astrology.model.User;
+
+import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,12 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 
 @Controller
@@ -39,76 +36,101 @@ public class UserController {
             @ApiResponse(responseCode = "422", description = "Bad Request",
                     content = {
                             @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDTO.class))
+                                    schema = @Schema(implementation = User.class))
                     }
             )
 
     })
 
-    @PostMapping("/save-new-user")
-    public ResponseEntity<String>saveNewUser (@Valid @RequestBody UserVO userVO){
-        User user = new User();
-        user.setName(userVO.getName());
-        user.setBirthDate(userVO.getBirthDate());
-        user.setAstrology(astrologyService.getByDate(userVO.getBirthDate()));
+    @GetMapping("/save-new-user")
+    public ResponseEntity<Astrology> saveNewUser( @RequestBody User user) {
+        user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()), user.getBirthMonth(user.getBirthDate()), user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
+                user.getCity() + " " + user.getState(), 15));
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("get-user-by-id/{id}")
-    public ResponseEntity<UserDTO>findUserById(@PathVariable("id") Long id){
-        Optional<User> optionalUser = this.userService.findById(id);
-        if(optionalUser.isPresent()){
+    @GetMapping("get-user-by-name/{name}")
+    public ResponseEntity<User>findUserByName(@PathVariable("name") String name){
+        Optional<User> optionalUser = this.userService.findByName(name);
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName(user.getName());
-            userDTO.setBirthDate(user.getBirthDate());
-            userDTO.setAstrology(astrologyService.getByDate(user.getBirthDate()));
-            return ResponseEntity.ok(userDTO);
+            return ResponseEntity.ok(user); //ESSE PONTO TA DANDO ERRO, MELHORAR O RETORNO
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("get-user-by-id/{id}")
+    public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
+        Optional<User> optionalUser = this.userService.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.ok(user);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("get-all-users")
-    public ResponseEntity<List<UserDTO>> listAllUsers(){
+    public ResponseEntity<List<User>> listAllUsers() {
         List<User> userList = this.userService.listAllUsers();
-        if(userList.isEmpty()){
+        if (userList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        List<UserDTO> userDTOList = userList.stream()
-                .map(user -> {
-                    UserDTO userDTO = new UserDTO();
-                    userDTO.setName(user.getName());
-                    userDTO.setBirthDate(user.getBirthDate());
-                    userDTO.setAstrology(astrologyService.getByDate(user.getBirthDate()));
-                    return userDTO;
-                }).collect(Collectors.toList());
-        return ResponseEntity.ok(userDTOList);
+        return ResponseEntity.ok(userList);
     }
 
+//    @GetMapping("get-chart-by-name/{name}")
+//    public ResponseEntity<User>getChartByName(@PathVariable("name") String name){
+//        Optional<User> optionalUser = this.userService.findByName(name);
+//        if (optionalUser.isPresent()) {
+//            User user = this.userService.getChartByName(String name);
+//
+//            return ResponseEntity.ok(user);
+//        }
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
 
-    @PutMapping("update-user-by-id/{id}")
-    public ResponseEntity<UserDTO>updateUserById(@PathVariable("id") Long id, @RequestBody UserVO userVO){
-        User user = this.userService.updateUserById(id, userVO);
-        if(Objects.nonNull(user)){
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName(userVO.getName());
-            userDTO.setBirthDate(userVO.getBirthDate());
-            userDTO.setAstrology(astrologyService.getByDate(userVO.getBirthDate()));
-            return ResponseEntity.ok().body(userDTO);
+    @PostMapping("update-user-by-id/{id}")
+    public ResponseEntity<User> updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
+        if (Objects.nonNull(user)) {
+            User updatedUser = this.userService.updateUserById(id, user);
+            return ResponseEntity.ok().build();
         }
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("update-user-by-name/{name}")
+    public ResponseEntity<User> updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
+        if (Objects.nonNull(user)) {
+            User updatedUser = this.userService.updateUserByName(name, user);
+            return ResponseEntity.ok(updatedUser);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("delete-user-by-id/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id) {
         Optional<User> optionalUser = this.userService.findById(id);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             this.userService.deleteUserById(user.getId());
             return ResponseEntity.ok("User removed");
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping("delete-user-by-name/{name}")
+    public ResponseEntity<String> deleteUserByName(@PathVariable("name") String name) {
+        Optional<User> optionalUser = this.userService.findByName(name);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            this.userService.deleteUserById(user.getId());
+            return ResponseEntity.ok("User removed");
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+
 
 }

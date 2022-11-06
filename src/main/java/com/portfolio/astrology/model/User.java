@@ -4,16 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+
 
 @Getter
 @Setter
 @Entity
-@Table(name = "Users")
-public class User {
+@Table(name = "users")
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -22,7 +24,33 @@ public class User {
     @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @Column(nullable = false, length = 2)
+    private int birthHour;
+
+    @Column(nullable = false, length = 2)
+    private int birthMinute;
+
+    @Column(nullable = false, length = 100)
+    private String city;
+
+    @Column(nullable = false, length = 100)
+    private String state;
+
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Astrology astrology;
+
+
+    public int getBirthYear(LocalDate birthDate) {
+       return birthDate.getYear();
+    }
+
+    public int getBirthMonth(LocalDate birthDate) {
+        return birthDate.getMonthValue();
+    }
+    public int getBirthDay(LocalDate birthDate) {
+        return birthDate.getDayOfMonth();
+    }
+
+
 
 }
