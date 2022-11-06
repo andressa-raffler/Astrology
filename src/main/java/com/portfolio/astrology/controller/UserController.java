@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 
 @Controller
+@RequestMapping("/astrology")
 public class UserController {
 
     @Autowired
@@ -29,20 +32,8 @@ public class UserController {
     @Autowired
     AstrologyService astrologyService;
 
-    @Operation(summary = "Save new user", tags = "user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-            @ApiResponse(responseCode = "422", description = "Bad Request",
-                    content = {
-                            @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = User.class))
-                    }
-            )
 
-    })
-
-    @GetMapping("/save-new-user")
+    @PostMapping("/save-new-user")
     public ResponseEntity<Astrology> saveNewUser( @RequestBody User user) {
         user.setAstrology(astrologyService.getChartByDate(user.getBirthYear(user.getBirthDate()), user.getBirthMonth(user.getBirthDate()), user.getBirthDay(user.getBirthDate()), user.getBirthHour(), user.getBirthMinute(),
                 user.getCity() + " " + user.getState(), 15));
@@ -79,18 +70,8 @@ public class UserController {
         return ResponseEntity.ok(userList);
     }
 
-//    @GetMapping("get-chart-by-name/{name}")
-//    public ResponseEntity<User>getChartByName(@PathVariable("name") String name){
-//        Optional<User> optionalUser = this.userService.findByName(name);
-//        if (optionalUser.isPresent()) {
-//            User user = this.userService.getChartByName(String name);
-//
-//            return ResponseEntity.ok(user);
-//        }
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//    }
 
-    @PostMapping("update-user-by-id/{id}")
+    @PutMapping("update-user-by-id/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
         if (Objects.nonNull(user)) {
             User updatedUser = this.userService.updateUserById(id, user);
@@ -99,7 +80,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("update-user-by-name/{name}")
+    @PutMapping("update-user-by-name/{name}")
     public ResponseEntity<User> updateUserByName(@PathVariable("name") String name, @RequestBody User user) {
         if (Objects.nonNull(user)) {
             User updatedUser = this.userService.updateUserByName(name, user);
@@ -130,7 +111,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-
-
-
+    @GetMapping("get-zodiac-chart/{name}")
+    public ResponseEntity<List<String>> getZodiacChart(@PathVariable("name") String name) {
+        Optional<User> optionalUser = this.userService.findByName(name);
+        if(optionalUser.isPresent()) {
+            List<String> zodiacChart = astrologyService.getZodiacChart(name);
+            return ResponseEntity.ok(zodiacChart);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
