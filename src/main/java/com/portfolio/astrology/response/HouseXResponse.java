@@ -7,7 +7,7 @@ import lombok.Data;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class HouseXResponse {
 
-    float longitude;
-    float longitudeSpeed;
+    long longitude;
+    long longitudeSpeed;
 
 }

@@ -6,12 +6,15 @@ import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.response.AstrologyResponse;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -24,7 +27,7 @@ public class AstrologyService {
     UserRepository userRepository;
 
     public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute, String queryLocation,
-                                            int houses) {
+                                    int houses) {
 
 
         RestTemplate restTemplate = new RestTemplate();
@@ -32,7 +35,7 @@ public class AstrologyService {
                 "https://api.astrologico.org/v1/chart?localdate=" +
                         birthDay + "|" + birthMonth + "|" +
                         birthYear + "|" + birthHour +
-                        "|"+ birthMinute + "&querylocation=" + queryLocation +
+                        "|" + birthMinute + "&querylocation=" + queryLocation +
                         "&houses=" + houses + "&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
                 AstrologyResponse.class);
 
@@ -41,9 +44,9 @@ public class AstrologyService {
 
     }
 
-    public Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
+    private Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
         Astrology astrology = new Astrology();
-  //      astrology.setStatus(astrologyResponse.getStatusResponse());
+        //      astrology.setStatus(astrologyResponse.getStatusResponse());
 
         Planet p0 = new Planet();
         p0.setName(astrologyResponse.getPlanets().getP0().getName());
@@ -93,7 +96,7 @@ public class AstrologyService {
         p7.setLongitudeSpeed(astrologyResponse.getPlanets().getP7().getLongitudeSpeed());
         astrology.addToPlanets(p7);
 
-        Planet p8  = new Planet();
+        Planet p8 = new Planet();
         p8.setName(astrologyResponse.getPlanets().getP8().getName());
         p8.setLongitude(astrologyResponse.getPlanets().getP8().getLongitude());
         p8.setLongitudeSpeed(astrologyResponse.getPlanets().getP8().getLongitudeSpeed());
@@ -192,6 +195,33 @@ public class AstrologyService {
 
         return astrology;
     }
+    public List<String> getZodiacChart(String name) {
+        Zodiac[] zodiacList = Zodiac.values();
+        Optional<User> optionalUser = this.userRepository.findTopByName(name);
+        List<Planet> planets;
+        List<House> houses;
+        List<String> zodiacChart = new ArrayList<>();
 
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            planets = user.getAstrology().getPlanets();
+            houses = user.getAstrology().getHouses();
+            for (House house : houses) {
+                for (Zodiac zodiac : zodiacList) {
+                    if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
+                        zodiacChart.add(house.getName() + ": " + zodiac.getDescription());
+                    }
+                }
+            }
+            for (Planet planet : planets) {
+                for (Zodiac zodiac : zodiacList) {
+                    if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
+                        zodiacChart.add(planet.getName() + ": " + zodiac.getDescription());
+                    }
+                }
+            }
+        }
+        return zodiacChart;
+    }
 }
 

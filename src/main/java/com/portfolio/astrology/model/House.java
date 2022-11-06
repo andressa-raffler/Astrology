@@ -18,10 +18,10 @@ public class House implements Serializable {
     String name;
 
     @Column(nullable = false, length = 100)
-    float longitude;
+    long longitude;
 
     @Column(nullable = false, length = 100)
-    float longitudeSpeed;
+    long longitudeSpeed;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "astrology_id", referencedColumnName = "id")
