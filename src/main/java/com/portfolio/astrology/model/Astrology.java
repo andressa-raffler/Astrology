@@ -1,13 +1,10 @@
 package com.portfolio.astrology.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.portfolio.astrology.response.HouseXResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;

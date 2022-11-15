@@ -1,75 +1,108 @@
 package com.portfolio.astrology.service;
 
 
-import com.portfolio.astrology.model.User;
+import com.portfolio.astrology.dto.request.UserDTO;
+import com.portfolio.astrology.dto.response.MessageResponseDTO;
+import com.portfolio.astrology.exception.UserNotFoundException;
+import com.portfolio.astrology.mapper.UserMapper;
+import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
 
-        @Autowired
+
         private UserRepository userRepository;
-        @Autowired
         private AstrologyService astrologyService;
 
-        public User saveUser(User user){
-                return this.userRepository.saveAndFlush(user);
+        private final UserMapper userMapper = UserMapper.INSTANCE;
+
+        public MessageResponseDTO saveUser(UserDTO userDTO){
+                User userToSave = userMapper.toModel(userDTO);
+                userToSave.setAstrology(getAstrologyApiPath(userToSave));
+                User savedUser = userRepository.saveAndFlush(userToSave);
+                return createMessageRespose("Person with id " + savedUser.getId() + " was created!");
         }
 
-        public User updateUserById(Long id, User updatedUser){
-                Optional<User> optionalUser = this.userRepository.findById(id);
-                if(optionalUser.isPresent()){
-                        User savedUser = getUserFromOptinalSavedUser(updatedUser, optionalUser);
-                        return this.userRepository.save(savedUser);
+
+        public MessageResponseDTO updateUserById(Long id, UserDTO updatedUser) throws UserNotFoundException {
+                verifyIfUserExists(id);
+                User userToUpdate = userMapper.toModel(updatedUser);
+                User updatedPerson = userRepository.saveAndFlush(userToUpdate);
+                return createMessageRespose("User with id " + id + " was updated!");
+        }
+
+
+        public UserDTO findById(Long id) throws UserNotFoundException {
+                User userSaved = verifyIfUserExists(id);
+                return userMapper.toDTO(userSaved);
+        }
+
+        public MessageResponseDTO deleteUserById(Long id) throws UserNotFoundException {
+                User userSaved = verifyIfUserExists(id);
+                userRepository.delete(userSaved);
+                return MessageResponseDTO
+                        .builder()
+                        .message("User with id was deleted!")
+                        .build();
+        }
+
+        public List<UserDTO> listAllUsers() {
+                List<User> allUsers = userRepository.findAll();
+                return allUsers.stream()
+                        .map(userMapper::toDTO)
+                        .collect(Collectors.toList());
+        }
+
+
+        public List<String> getZodiacChart(Long id) throws UserNotFoundException {
+                User userSaved = verifyIfUserExists(id);
+                Zodiac[] zodiacList = Zodiac.values();
+                List<Planet> planets;
+                List<House> houses;
+                List<String> zodiacChart = new ArrayList<>();
+                zodiacChart.add("Zodiac Chart from user: "+userSaved.getName());
+                planets = userSaved.getAstrology().getPlanets();
+                for (Planet planet : planets) {
+                        for (Zodiac zodiac : zodiacList) {
+                                if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
+                                        zodiacChart.add(planet.getName() + ": " + zodiac.getDescription());
+                                }
+                        }
                 }
-           return null; //melhorar esse retorno
-        }
-
-
-        public User updateUserByName(String name, User updatedUser) {
-                Optional<User> optionalSavedUser = this.userRepository.findTopByName(name);
-                if(optionalSavedUser.isPresent()){
-                        User savedUser = getUserFromOptinalSavedUser(updatedUser, optionalSavedUser);
-                        return this.userRepository.save(savedUser);
+                houses = userSaved.getAstrology().getHouses();
+                for (House house : houses) {
+                        for (Zodiac zodiac : zodiacList) {
+                                if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
+                                        zodiacChart.add(house.getName() + ": " + zodiac.getDescription());
+                                }
+                        }
                 }
-                return null; //melhorar esse retorno
+
+                return zodiacChart;
         }
 
 
-        public Optional<User> findById(Long id){
-                return this.userRepository.findById(id);
+        private Astrology getAstrologyApiPath(User userToSave) {
+                return astrologyService.getChartByDate(userToSave.getBirthYear(userToSave.getBirthDate()), userToSave.getBirthMonth(userToSave.getBirthDate()), userToSave.getBirthDay(userToSave.getBirthDate()), userToSave.getBirthHour(), userToSave.getBirthMinute(),
+                        userToSave.getCity() + " " + userToSave.getState(), 15);
+        }
+        private MessageResponseDTO createMessageRespose(String message){
+                return MessageResponseDTO
+                        .builder()
+                        .message(message)
+                        .build();
+        }
+        private User verifyIfUserExists(Long id) throws UserNotFoundException {
+                return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         }
 
-        public Optional<User> findByName(String name) {
-                return this.userRepository.findTopByName(name);
-        }
-
-        public void deleteUserByName(String name) {
-                this.userRepository.deleteByName(name);
-        }
-
-        public void deleteUserById(Long id) {
-                this.userRepository.deleteById(id);
-        }
-
-        public List<User> listAllUsers() {
-                return this.userRepository.findAll();
-        }
-
-
-
-        private static User getUserFromOptinalSavedUser(User updatedUser, Optional<User> optionalSavedUser) {
-                User savedUser = optionalSavedUser.get();
-                savedUser.setName(updatedUser.getName());
-                savedUser.setBirthDate(updatedUser.getBirthDate());
-                savedUser.setBirthHour(updatedUser.getBirthHour());
-                savedUser.setBirthMinute(updatedUser.getBirthMinute());
-                savedUser.setCity(updatedUser.getCity());
-                savedUser.setState(updatedUser.getState());
-                return savedUser;
-        }
 }

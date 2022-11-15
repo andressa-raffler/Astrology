@@ -38,8 +38,6 @@ public class AstrologyService {
                         "|" + birthMinute + "&querylocation=" + queryLocation +
                         "&houses=" + houses + "&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
                 AstrologyResponse.class);
-
-
         return getAstrologyFromAstrologyResponse(Objects.requireNonNull(response.getBody()));
 
     }
@@ -195,33 +193,7 @@ public class AstrologyService {
 
         return astrology;
     }
-    public List<String> getZodiacChart(String name) {
-        Zodiac[] zodiacList = Zodiac.values();
-        Optional<User> optionalUser = this.userRepository.findTopByName(name);
-        List<Planet> planets;
-        List<House> houses;
-        List<String> zodiacChart = new ArrayList<>();
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            planets = user.getAstrology().getPlanets();
-            houses = user.getAstrology().getHouses();
-            for (House house : houses) {
-                for (Zodiac zodiac : zodiacList) {
-                    if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
-                        zodiacChart.add(house.getName() + ": " + zodiac.getDescription());
-                    }
-                }
-            }
-            for (Planet planet : planets) {
-                for (Zodiac zodiac : zodiacList) {
-                    if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
-                        zodiacChart.add(planet.getName() + ": " + zodiac.getDescription());
-                    }
-                }
-            }
-        }
-        return zodiacChart;
-    }
+
 }
 
