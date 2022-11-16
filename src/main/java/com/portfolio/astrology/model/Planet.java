@@ -15,13 +15,13 @@ public class Planet implements Serializable {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    String name;
+    private String name;
 
     @Column(nullable = false, length = 100)
-    Long longitude;
+    private Long longitude;
 
     @Column(nullable = false, length = 100)
-    Long longitudeSpeed;
+    private Long longitudeSpeed;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="astrology_id",  referencedColumnName = "id")
