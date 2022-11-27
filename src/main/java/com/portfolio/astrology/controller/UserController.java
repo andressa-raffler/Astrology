@@ -15,6 +15,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/astrology/v1/user")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {

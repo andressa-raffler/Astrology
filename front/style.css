@@ -1,0 +1,121 @@
+:root {
+    --green-primary: #598a87;
+    --green-secundary: #7da3a1;
+    --soft-green-primary: #b5c5be;
+    --soft-green-secundary:#d4dcd8;
+    --pink-primary:#eecbbf;
+    --pink-secundary:#f1ded9;
+    --mustard-primary:#f1ded9;
+    --mustard-secundary:#e9d2a8;
+    --gray:#848485;
+    --softy-gray:#aca4a4;
+    --primary-font: 'Inter';
+}
+
+body {
+    background-color: var(--pink-secundary);
+    color: var(--pink-primary);
+    font-family: var(--primary-font);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+.container { /* classe criada pois o padrao do figma é ter um walpaper de pag inteira em cada pagina*/
+    height: 100vh ; /*vh significa view point height */
+
+}
+
+.primary {
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+.container__box{
+    text-align: center; 
+    margin: 1em 0 2em 0; /* cima, direita, baixo, esquerda */
+    
+
+}
+
+.button__box{
+    margin:  2em 20em 2em 20em; /* topo e baixo , esquerda e direita */
+}
+
+.container__title{
+    font-size: 50px;
+    font-weight: 700;
+    color: var(--green-primary);
+    margin: 40px 0 40px 0;
+}
+
+.container__login{
+    border-radius: 5px;
+    padding: 1em;
+    color: var(--green-secundary);
+    display: block;
+    text-decoration: none;
+    margin-bottom: 1em;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;  
+}
+
+.secundary__title{
+    font-size: 25px;
+    font-weight: 400;
+    color: var(--green-primary);
+}
+
+.container__new_user{
+    border-radius: 5px;
+    padding: 1em;
+    color: var(--green-secundary);
+    display: block;
+    text-decoration: none;
+    margin-bottom: 1em;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;    
+
+}
+
+.container__note{
+    font-size: 15px;
+    font-weight: 100;
+    color: var(--green-primary);    
+    margin: 2em 0 1em 0;
+}
+
+input{
+    width: 250px;
+    height: 25px;
+    border-radius: 8px;
+    padding: 0 15px 0 15px;
+}
+
+button{
+    width: 150px;
+    height: 25px;
+}
+
+a{
+    font-size: 15px;
+    font-weight: 100;
+    text-decoration: none;
+    color:var(--green-primary);
+    background-color:var(--pink-secundary);
+    width: 150px;
+    height: 25px; 
+}
+
