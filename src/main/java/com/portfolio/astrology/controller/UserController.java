@@ -8,6 +8,7 @@ import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class UserController {
 
     UserService userService;
 
-    @GetMapping("/{id}") //VERIFICAR O HASH PARA ENCODIFICAR O ID
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO findUserById(@PathVariable("id") Long id) throws UserNotFoundException {
         return userService.findById(id);
@@ -52,8 +53,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public MessageResponseDTO validatePassword(@RequestBody String email, String password) throws UserNotFoundException {
-        return userService.validatePassword(email, password);
+    public MessageResponseDTO validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+        return userService.validatePassword(userDTO.getEmail(), userDTO.getPassword());
 
     }
 

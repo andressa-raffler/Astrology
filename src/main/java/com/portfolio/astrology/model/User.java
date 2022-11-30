@@ -24,10 +24,10 @@ public class User implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT) //to solve this problem: org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
