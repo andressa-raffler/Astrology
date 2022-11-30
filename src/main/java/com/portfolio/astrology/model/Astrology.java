@@ -18,7 +18,6 @@ public class Astrology implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @OneToMany(mappedBy = "astrology", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Planet> planets = new ArrayList<>();
     protected void setPlanets(List<Planet> planets) {
