@@ -76,7 +76,7 @@ public class UserService {
 
         public MessageResponseDTO validatePassword(String email, String password) throws UserNotFoundException {
                 User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
-                boolean validPassword = passwordEncoder.matches(user.getPassword(), password);
+                boolean validPassword = passwordEncoder.matches(password, user.getPassword());
                 if (validPassword){
                         return MessageResponseDTO
                                 .builder()

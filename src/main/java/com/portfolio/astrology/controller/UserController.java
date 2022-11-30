@@ -9,10 +9,14 @@ import com.portfolio.astrology.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -23,7 +27,7 @@ public class UserController {
 
     UserService userService;
 
-    @GetMapping("/{id}") //VERIFICAR O HASH PARA ENCODIFICAR O ID
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO findUserById(@PathVariable("id") Long id) throws UserNotFoundException {
         return userService.findById(id);
@@ -52,9 +56,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public MessageResponseDTO validatePassword(@RequestBody String email, String password) throws UserNotFoundException {
-        return userService.validatePassword(email, password);
-
+    public MessageResponseDTO validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+        return userService.validatePassword(userDTO.getEmail(), userDTO.getPassword());
     }
 
-}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String,String> handleValidationException (MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>() ;
+        ex.getBindingResult().getAllErrors().forEach( (error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+            return errors;
+        }
+    }
