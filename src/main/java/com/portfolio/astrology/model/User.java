@@ -2,10 +2,13 @@ package com.portfolio.astrology.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -15,40 +18,28 @@ import java.time.LocalDate;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
-    private LocalDate birthDate;
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
 
-    @Column(nullable = false, length = 2)
-    private int birthHour;
+    @Column(nullable = false)
+    private String password;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT) //to solve this problem: org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags
+    private List<Person> people = new ArrayList<>();
 
-    @Column(nullable = false, length = 2)
-    private int birthMinute;
-
-    @Column(nullable = false, length = 100)
-    private String city;
-
-    @Column(nullable = false, length = 100)
-    private String state;
-
-    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-    private Astrology astrology;
-
-
-    public int getBirthYear(LocalDate birthDate) {
-       return birthDate.getYear();
+    protected void setPeople(List<Person> people) {
+        this.people = people;
     }
 
-    public int getBirthMonth(LocalDate birthDate) {
-        return birthDate.getMonthValue();
-    }
-    public int getBirthDay(LocalDate birthDate) {
-        return birthDate.getDayOfMonth();
+    public void addToUsers(Person person) {
+        person.setUser(this);
+        this.people.add(person);
     }
 
 

@@ -1,27 +1,28 @@
 package com.portfolio.astrology.controller;
 
 
+
 import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.UserNotFoundException;
-import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/astrology/v1/user")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
     UserService userService;
-    AstrologyService astrologyService;
-
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -34,12 +35,7 @@ public class UserController {
         return userService.listAllUsers();
     }
 
-    @GetMapping("/zodiac-chart/{id}")
-    public  List<String> getZodiacChart(@PathVariable("id") Long id) throws UserNotFoundException {
-       return userService.getZodiacChart(id);
-    }
-
-    @PostMapping
+    @PostMapping("/singn-up")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO saveNewUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.saveUser(userDTO);
@@ -47,9 +43,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public MessageResponseDTO updateUserById(@PathVariable("id") Long id, @Valid @RequestBody UserDTO userDTO) throws UserNotFoundException {
-        return userService.updateUserById(id,userDTO);
+        return userService.updateUserById(id, userDTO);
     }
-
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -57,5 +52,10 @@ public class UserController {
         return userService.deleteUserById(id);
     }
 
+    @PostMapping("/login")
+    public MessageResponseDTO validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+        return userService.validatePassword(userDTO.getEmail(), userDTO.getPassword());
+
+    }
 
 }

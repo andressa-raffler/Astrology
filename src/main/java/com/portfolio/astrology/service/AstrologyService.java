@@ -2,7 +2,7 @@ package com.portfolio.astrology.service;
 
 
 import com.portfolio.astrology.model.*;
-import com.portfolio.astrology.repository.UserRepository;
+import com.portfolio.astrology.repository.PersonRepository;
 import com.portfolio.astrology.response.AstrologyResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+
 
 @Getter
 @Setter
@@ -24,7 +21,7 @@ public class AstrologyService {
 
 
     @Autowired
-    UserRepository userRepository;
+    PersonRepository personRepository;
 
     public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute, String queryLocation,
                                     int houses) {

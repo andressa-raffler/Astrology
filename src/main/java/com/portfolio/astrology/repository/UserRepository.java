@@ -9,6 +9,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findTopByName(String name);
-
     void deleteByName(String name);
+
+   // Optional<User> findByEmail(String email);
+  //PAREI ARRUMANDO O FIND BY EMAIL
+
+    Optional<User> findByEmail(String email);
+
+
+
 }

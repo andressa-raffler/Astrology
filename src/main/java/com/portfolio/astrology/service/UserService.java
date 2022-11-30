@@ -1,6 +1,7 @@
 package com.portfolio.astrology.service;
 
 
+
 import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.UserNotFoundException;
@@ -9,9 +10,8 @@ import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,22 +21,23 @@ public class UserService {
 
 
         private UserRepository userRepository;
-        private AstrologyService astrologyService;
-
+        private PasswordEncoder passwordEncoder;
         private final UserMapper userMapper = UserMapper.INSTANCE;
 
         public MessageResponseDTO saveUser(UserDTO userDTO){
+                String encoder = this.passwordEncoder.encode(userDTO.getPassword());
+                userDTO.setPassword(encoder);
                 User userToSave = userMapper.toModel(userDTO);
-                userToSave.setAstrology(getAstrologyApiPath(userToSave));
                 User savedUser = userRepository.saveAndFlush(userToSave);
-                return createMessageRespose("Person with id " + savedUser.getId() + " was created!");
+                return createMessageRespose("User with id " + savedUser.getId() + " was created!");
         }
 
-
-        public MessageResponseDTO updateUserById(Long id, UserDTO updatedUser) throws UserNotFoundException {
+        public MessageResponseDTO updateUserById(Long id, UserDTO updatedDTOUser) throws UserNotFoundException {
                 verifyIfUserExists(id);
-                User userToUpdate = userMapper.toModel(updatedUser);
-                User updatedPerson = userRepository.saveAndFlush(userToUpdate);
+                String encoder = this.passwordEncoder.encode(updatedDTOUser.getPassword());
+                updatedDTOUser.setPassword(encoder);
+                User userToUpdate = userMapper.toModel(updatedDTOUser);
+                User updatedUser = userRepository.saveAndFlush(userToUpdate);
                 return createMessageRespose("User with id " + id + " was updated!");
         }
 
@@ -63,38 +64,6 @@ public class UserService {
         }
 
 
-        public List<String> getZodiacChart(Long id) throws UserNotFoundException {
-                User userSaved = verifyIfUserExists(id);
-                Zodiac[] zodiacList = Zodiac.values();
-                List<Planet> planets;
-                List<House> houses;
-                List<String> zodiacChart = new ArrayList<>();
-                zodiacChart.add("Zodiac Chart from user: "+userSaved.getName());
-                planets = userSaved.getAstrology().getPlanets();
-                for (Planet planet : planets) {
-                        for (Zodiac zodiac : zodiacList) {
-                                if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
-                                        zodiacChart.add(planet.getName() + ": " + zodiac.getDescription());
-                                }
-                        }
-                }
-                houses = userSaved.getAstrology().getHouses();
-                for (House house : houses) {
-                        for (Zodiac zodiac : zodiacList) {
-                                if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
-                                        zodiacChart.add(house.getName() + ": " + zodiac.getDescription());
-                                }
-                        }
-                }
-
-                return zodiacChart;
-        }
-
-
-        private Astrology getAstrologyApiPath(User userToSave) {
-                return astrologyService.getChartByDate(userToSave.getBirthYear(userToSave.getBirthDate()), userToSave.getBirthMonth(userToSave.getBirthDate()), userToSave.getBirthDay(userToSave.getBirthDate()), userToSave.getBirthHour(), userToSave.getBirthMinute(),
-                        userToSave.getCity() + " " + userToSave.getState(), 15);
-        }
         private MessageResponseDTO createMessageRespose(String message){
                 return MessageResponseDTO
                         .builder()
@@ -105,4 +74,21 @@ public class UserService {
                 return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         }
 
+        public MessageResponseDTO validatePassword(String email, String password) throws UserNotFoundException {
+                User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
+                boolean validPassword = passwordEncoder.matches(password, user.getPassword());
+                if (validPassword){
+                        return MessageResponseDTO
+                                .builder()
+                                .message("Suscessfull Login!")
+                                .build();
+                }else{
+                        return MessageResponseDTO
+                                .builder()
+                                .message("Invalid Password")
+                                .build();
+                }
+        }
+
 }
+
