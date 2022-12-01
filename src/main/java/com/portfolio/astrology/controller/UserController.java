@@ -8,6 +8,7 @@ import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -58,6 +59,7 @@ public class UserController {
     @PostMapping("/login")
     public MessageResponseDTO validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
         return userService.validatePassword(userDTO.getEmail(), userDTO.getPassword());
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

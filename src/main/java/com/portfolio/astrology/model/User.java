@@ -29,6 +29,7 @@ public class User implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
+
     @NotBlank(message = "The email field is required")
     @Email(message = "Invalid email")
 //    @UniqueElements(message = "Email is already registered")
@@ -36,6 +37,9 @@ public class User implements Serializable {
     private String email;
 
     @NotBlank(message = "The password field is required")
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
+
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
