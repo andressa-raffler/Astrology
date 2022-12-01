@@ -4,8 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +25,18 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @NotBlank(message = "The name field is required")
     @Column(nullable = false, length = 100)
     private String name;
 
+
+    @NotBlank(message = "The email field is required")
+    @Email(message = "Invalid email")
+//    @UniqueElements(message = "Email is already registered")
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
+
+    @NotBlank(message = "The password field is required")
     @Column(nullable = false, length = 100, unique = true)
     private String email;
 
