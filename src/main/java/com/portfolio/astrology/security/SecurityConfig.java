@@ -22,18 +22,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
+        http.csrf().disable() //CSRF é uma segurança para requisiçoes externas, verificar futuramente como faz para habilitar
                         .authorizeHttpRequests()
                         .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login")
                         .permitAll()
-                        .anyRequest().authenticated().and().cors();
-
-//        http
-//                .authorizeHttpRequests((authz) -> authz
-//                        .antMatchers(HttpMethod.POST,"/astrology/v1/user/singn-up").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .httpBasic(withDefaults());
+                        .anyRequest().authenticated().and().cors(); //o cors permite que eu acesse a api por requisiçoes externas
         http.addFilterBefore(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
