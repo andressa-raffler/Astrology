@@ -24,7 +24,7 @@ public class TokenUseful {
     private static final String SECRET_KEY = "Up3bdcmamXeDez7zNW9Uz9Fy7UW4j8Q9";
     private static final String ISSUER = "Raffler";
 
-    private static String createToken(User user){
+    public static String createToken(User user){
         Key securityKey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
         String token = Jwts.builder()
                            .setSubject(user.getName())

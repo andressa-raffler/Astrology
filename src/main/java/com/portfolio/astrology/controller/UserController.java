@@ -5,11 +5,12 @@ package com.portfolio.astrology.controller;
 import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.UserNotFoundException;
+import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +58,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public MessageResponseDTO validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
-        return userService.validatePassword(userDTO.getEmail(), userDTO.getPassword());
+    public ResponseEntity<Token> validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+        return userService.generateToken(userDTO.getEmail(), userDTO.getPassword());
 
     }
 
