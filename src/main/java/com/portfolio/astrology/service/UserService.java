@@ -11,8 +11,13 @@ import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.security.TokenUseful;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -26,6 +31,7 @@ public class UserService {
         private UserRepository userRepository;
         private PasswordEncoder passwordEncoder;
         private final UserMapper userMapper = UserMapper.INSTANCE;
+        private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
         public MessageResponseDTO saveUser(UserDTO userDTO){
                 String encoder = this.passwordEncoder.encode(userDTO.getPassword());
@@ -60,12 +66,12 @@ public class UserService {
         }
 
         public List<UserDTO> listAllUsers() {
+                logger.info("User: "+ getUserLogged()+ "listed all users");
                 List<User> allUsers = userRepository.findAll();
                 return allUsers.stream()
                         .map(userMapper::toDTO)
                         .collect(Collectors.toList());
         }
-
 
         private MessageResponseDTO createMessageRespose(String message){
                 return MessageResponseDTO
@@ -90,6 +96,15 @@ public class UserService {
                         return ResponseEntity.status(403).build();
                 }
         }
+
+        public ResponseEntity<String> getUserLogged(){
+                Authentication userLogged = SecurityContextHolder.getContext().getAuthentication();
+                if(!(userLogged instanceof AnonymousAuthenticationToken)){
+                        return ResponseEntity.ok(userLogged.getName());
+                }
+                return ResponseEntity.status(404).build();
+        }
+
 
 }
 

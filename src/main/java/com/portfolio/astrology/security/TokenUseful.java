@@ -51,11 +51,9 @@ public class TokenUseful {
     public static UsernamePasswordAuthenticationToken validate(HttpServletRequest request) {
         String token = request.getHeader(HEADER);
         token = token.replace(PREFIX, "");
-
         Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes())
                 .build()
                 .parseClaimsJws(token);
-
         String username = jwsClaims.getBody().getSubject();
         String issuer = jwsClaims.getBody().getIssuer();
         Date expiration = jwsClaims.getBody().getExpiration();
