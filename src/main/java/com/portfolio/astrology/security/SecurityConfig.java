@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder()
     {
@@ -24,7 +24,7 @@ public class SecurityConfiguration {
 
         http.csrf().disable()
                         .authorizeHttpRequests()
-                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up")
+                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login")
                         .permitAll()
                         .anyRequest().authenticated().and().cors();
 
