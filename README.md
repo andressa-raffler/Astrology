@@ -2,15 +2,15 @@
 
 Projeto desenvolvido com as seguintes tecnologias:
 
-Backend:
--Java;
--SpringBoot;
--Postgres SQL;
--Docker;
--REST API;
--MapStruct;
+## Backend:
+  - Java;
+  - SpringBoot;
+  - Postgres SQL;
+  - Docker;
+  - REST API;
+  - MapStruct;
 
-Frontend:
--JavaScript;
--HTML;
--CSS;
+## Frontend:
+  - JavaScript;
+  - HTML;
+  - CSS;
