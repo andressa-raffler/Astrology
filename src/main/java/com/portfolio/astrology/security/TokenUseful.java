@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -65,5 +66,22 @@ public class TokenUseful {
 
         return null;
     }
+
+    public String getEmailLogado(HttpServletRequest request, String email){
+        String token = request.getHeader(HEADER);
+        token = token.replace(PREFIX, "");
+        Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes())
+                .build()
+                .parseClaimsJws(token);
+        String userEmail = jwsClaims.getBody().getSubject();
+        return userEmail;
+    }
+
+
+
+
+
+
+
 
 }
