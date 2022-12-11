@@ -66,6 +66,10 @@ public class Person implements Serializable {
 
 
     public void setUser(User user) {
-
+        setUsers(user);
     }
+
+
+
+
 }

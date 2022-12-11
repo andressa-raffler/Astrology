@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +32,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO findUserById(@PathVariable("id") Long id) throws UserNotFoundException {
-        return userService.findById(id);
+    public UserDTO findUserById(@PathVariable("id") Long id, HttpServletRequest request) throws UserNotFoundException {
+        return userService.findById(id, request);
     }
 
     @GetMapping

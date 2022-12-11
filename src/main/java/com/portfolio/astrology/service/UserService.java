@@ -9,12 +9,19 @@ import com.portfolio.astrology.mapper.UserMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.Token;
-import com.portfolio.astrology.security.TokenUseful;
+import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +33,10 @@ public class UserService {
         private UserRepository userRepository;
         private PasswordEncoder passwordEncoder;
         private final UserMapper userMapper = UserMapper.INSTANCE;
+        private final Logger logger = LoggerFactory.getLogger(UserService.class);
+        private TokenService tokenService;
+
+
 
         public MessageResponseDTO saveUser(UserDTO userDTO){
                 String encoder = this.passwordEncoder.encode(userDTO.getPassword());
@@ -45,7 +56,7 @@ public class UserService {
         }
 
 
-        public UserDTO findById(Long id) throws UserNotFoundException {
+        public UserDTO findById(Long id, HttpServletRequest request) throws UserNotFoundException {
                 User userSaved = verifyIfUserExists(id);
                 return userMapper.toDTO(userSaved);
         }
@@ -60,12 +71,12 @@ public class UserService {
         }
 
         public List<UserDTO> listAllUsers() {
+                logger.info("User: "+ getUserLogged()+ "listed all users");
                 List<User> allUsers = userRepository.findAll();
                 return allUsers.stream()
                         .map(userMapper::toDTO)
                         .collect(Collectors.toList());
         }
-
 
         private MessageResponseDTO createMessageRespose(String message){
                 return MessageResponseDTO
@@ -84,12 +95,22 @@ public class UserService {
         public ResponseEntity<Token> generateToken(String email, String password) throws UserNotFoundException {
                 User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
                 if (validPassword(user, password)){
-                        Token token = new Token(TokenUseful.createToken(user));
+                        Token token = new Token(tokenService.createToken(user));
                         return ResponseEntity.ok(token);
                 }else{
                         return ResponseEntity.status(403).build();
                 }
         }
+
+        public ResponseEntity<String> getUserLogged(){
+                Authentication userLogged = SecurityContextHolder.getContext().getAuthentication();
+                if(!(userLogged instanceof AnonymousAuthenticationToken)){
+                        return ResponseEntity.ok(userLogged.getName());
+                }
+                return ResponseEntity.status(404).build();
+        }
+
+
 
 }
 

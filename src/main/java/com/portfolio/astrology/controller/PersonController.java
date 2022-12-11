@@ -8,8 +8,12 @@ import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,6 +26,8 @@ public class PersonController {
 
     PersonService personService;
     AstrologyService astrologyService;
+    private HttpServletRequest request;
+
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -31,7 +37,7 @@ public class PersonController {
 
     @GetMapping
     public List<PersonDTO> listAllPeople() {
-        return personService.listAllPeople();
+        return personService.listAllPeople(request);
     }
 
     @GetMapping("/zodiac-chart/{id}")
@@ -41,8 +47,8 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO) {
-        return personService.savePerson(personDTO);
+     public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO) {
+        return personService.savePerson(personDTO, request);
     }
 
     @PutMapping("/{id}")

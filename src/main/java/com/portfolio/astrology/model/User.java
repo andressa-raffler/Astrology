@@ -50,8 +50,9 @@ public class User implements Serializable {
 
     public void addToUsers(Person person) {
         person.setUser(this);
-        this.people.add(person);
+        people.add(person);
     }
+
 
 
 
