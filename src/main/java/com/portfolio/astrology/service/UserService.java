@@ -9,14 +9,13 @@ import com.portfolio.astrology.mapper.UserMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.Token;
-import com.portfolio.astrology.security.TokenUseful;
+import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +34,9 @@ public class UserService {
         private PasswordEncoder passwordEncoder;
         private final UserMapper userMapper = UserMapper.INSTANCE;
         private final Logger logger = LoggerFactory.getLogger(UserService.class);
+        private TokenService tokenService;
+
+
 
         public MessageResponseDTO saveUser(UserDTO userDTO){
                 String encoder = this.passwordEncoder.encode(userDTO.getPassword());
@@ -93,7 +95,7 @@ public class UserService {
         public ResponseEntity<Token> generateToken(String email, String password) throws UserNotFoundException {
                 User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
                 if (validPassword(user, password)){
-                        Token token = new Token(TokenUseful.createToken(user));
+                        Token token = new Token(tokenService.createToken(user));
                         return ResponseEntity.ok(token);
                 }else{
                         return ResponseEntity.status(403).build();
@@ -107,6 +109,7 @@ public class UserService {
                 }
                 return ResponseEntity.status(404).build();
         }
+
 
 
 }

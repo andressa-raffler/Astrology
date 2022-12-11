@@ -7,11 +7,14 @@ import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.mapper.PersonMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.PersonRepository;
+import com.portfolio.astrology.repository.UserRepository;
+import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.patterns.PerObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,15 +26,19 @@ public class PersonService {
 
         private PersonRepository personRepository;
         private AstrologyService astrologyService;
+        private UserRepository userRepository;
+        private UserService userService;
+        private TokenService tokenService;
 
         private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
-        public MessageResponseDTO savePerson(PersonDTO personDTO){
+        public MessageResponseDTO savePerson(PersonDTO personDTO, HttpServletRequest request){
                 Person personToSave = personMapper.toModel(personDTO);
                 personToSave.setAstrology(getAstrologyApiPath(personToSave));
-                Person savedPerson = personRepository.saveAndFlush(personToSave);
-                User user = new User();
+                User user = userRepository.findByEmail(getEmailFromToken(request)).get();
                 user.addToUsers(personToSave);  //VERIFICAR ESSE CÓDIGO AQUI!!!!
+                personToSave.setUser(user);
+                Person savedPerson = personRepository.saveAndFlush(personToSave);
                 return createMessageResponse("Person with id " + savedPerson.getId() + " was created!");
         }
 
@@ -58,17 +65,17 @@ public class PersonService {
                         .build();
         }
 
-        public List<PersonDTO> listAllPeople() {
-//                List<Person> allPeople = personRepository.findAll();
-//                return allPeople.stream()
-//                        .map(personMapper::toDTO)
-//                        .collect(Collectors.toList());
-
-
-                List<Person> allPeoleByUser = personRepository.findAllPersonFromOneUser("email").stream().toList();
+        public List<PersonDTO> listAllPeople(HttpServletRequest request) {
+                String email = getEmailFromToken(request);
+                List<Person> allPeoleByUser = personRepository.findAllPersonFromOneUser(email).stream().toList();
                 return allPeoleByUser.stream()
                                      .map(personMapper::toDTO)
                                      .collect(Collectors.toList());
+        }
+
+        private String getEmailFromToken(HttpServletRequest request) {
+                String token = tokenService.getTokenFromRequest(request);
+                return  tokenService.getEmailLogado(token);
         }
 
 
