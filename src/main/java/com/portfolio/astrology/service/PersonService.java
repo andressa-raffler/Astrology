@@ -8,6 +8,7 @@ import com.portfolio.astrology.mapper.PersonMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.PersonRepository;
 import lombok.AllArgsConstructor;
+import org.aspectj.weaver.patterns.PerObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,10 +59,16 @@ public class PersonService {
         }
 
         public List<PersonDTO> listAllPeople() {
-                List<Person> allPeople = personRepository.findAll();
-                return allPeople.stream()
-                        .map(personMapper::toDTO)
-                        .collect(Collectors.toList());
+//                List<Person> allPeople = personRepository.findAll();
+//                return allPeople.stream()
+//                        .map(personMapper::toDTO)
+//                        .collect(Collectors.toList());
+
+
+                List<Person> allPeoleByUser = personRepository.findAllPersonFromOneUser("email").stream().toList();
+                return allPeoleByUser.stream()
+                                     .map(personMapper::toDTO)
+                                     .collect(Collectors.toList());
         }
 
 

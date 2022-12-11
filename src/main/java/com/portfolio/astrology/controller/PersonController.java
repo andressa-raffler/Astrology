@@ -8,6 +8,8 @@ import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -41,7 +43,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO) {
+     public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO) {
         return personService.savePerson(personDTO);
     }
 

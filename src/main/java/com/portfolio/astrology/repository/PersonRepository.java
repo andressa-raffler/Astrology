@@ -14,9 +14,14 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     void deleteByName(String name);
 
     @Query(
-            value = "select * from users left join people on users.id = people.users_id where users.email = 'andressa.raffer@gmail.com'",
+            value = """
+                    \t
+                       select people.* from users \s
+                    \t left join people on users.id = people.users_id\s
+                    \t where users.email = ?1
+                    """,
             nativeQuery = true)
-    Collection<Person> findAllActiveUsersNative();
+    Collection<Person> findAllPersonFromOneUser(String email);
 
 
 }
