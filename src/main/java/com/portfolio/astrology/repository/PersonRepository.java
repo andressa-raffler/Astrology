@@ -24,4 +24,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Collection<Person> findAllPersonFromOneUser(String email);
 
 
+
+
+
 }
