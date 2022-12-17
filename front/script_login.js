@@ -1,8 +1,8 @@
 const form = document.querySelector("form");
 
 
-const inputLoginEmail = document.querySelector(".login_email");
-const inputLoginPassword = document.querySelector(".login_password");
+const inputLoginEmail = document.querySelector(".email");
+const inputLoginPassword = document.querySelector(".password");
 
 
 
@@ -15,14 +15,15 @@ function login (){
         },
         method: "POST",
         body: JSON.stringify({
-            inputEmail: inputLoginEmail.value,
-            inputPassword: inputLoginPassword.value
-
+            email: inputLoginEmail.value,
+            password: inputLoginPassword.value,
+            credentials: 'include',
         })
     })
     .then(function(res){console.log(res)})
     .catch(function(res){console.log(res)})
     };
+
 
 
 
@@ -34,6 +35,9 @@ function clean(){
 form.addEventListener('submit', function (event){
     event.preventDefault();
     login();
-    clean();
-});
 
+
+
+    
+  //  clean();
+});

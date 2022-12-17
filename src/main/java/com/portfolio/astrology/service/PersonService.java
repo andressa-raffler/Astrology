@@ -10,7 +10,6 @@ import com.portfolio.astrology.mapper.PersonMapper;
 import com.portfolio.astrology.mapper.UserMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.PersonRepository;
-import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

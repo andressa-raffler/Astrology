@@ -68,10 +68,30 @@ body {
     gap: 0.5em;  
 }
 
+.container__index{
+    text-decoration: none;
+    color: var(--green-primary);
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;    
+}
+
+
 .secundary__title{
     font-size: 25px;
     font-weight: 400;
     color: var(--green-primary);
+}
+
+
+.small__title{
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--green-secundary);
+
 }
 
 .container__new_user{

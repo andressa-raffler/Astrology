@@ -100,6 +100,7 @@ public class UserService {
                 User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
                 if (validPassword(user, password)){
                         Token token = new Token(tokenService.createToken(user));
+                        System.out.println("TOKEN GERADO!!! -----------------------------");
                         return ResponseEntity.ok(token);
                 }else{
                         return ResponseEntity.status(403).build();
