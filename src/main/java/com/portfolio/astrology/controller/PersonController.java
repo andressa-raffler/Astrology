@@ -41,9 +41,9 @@ public class PersonController {
     }
 
 
-    @GetMapping
-    public List<PersonDTO> listAllPeople(HttpServletRequest request) throws UserNotFoundException {
-        return personService.listAllPeople(request);
+    @GetMapping("/zodiac-chart")
+    public List<String> listAllCharts(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
+        return personService.listAllCharts(request);
     }
 
     @GetMapping("/zodiac-chart/{name}")

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,11 +72,14 @@ public class PersonService {
                 .build();
     }
 
-    public List<PersonDTO> listAllPeople(HttpServletRequest request) throws UserNotFoundException {
+    public List<String> listAllCharts(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
         List<Person> allPeoleByUser = getUsersPeopleFromRequest(request);
-        return allPeoleByUser.stream()
-                .map(personMapper::toDTO)
-                .collect(Collectors.toList());
+        List<String> allChartsByUser = new ArrayList<>();
+        for (Person person : allPeoleByUser ) {
+            List<String> chart =  getZodiacChart(person.getName(), request);
+            allChartsByUser.add(chart.toString());
+        }
+        return allChartsByUser;
     }
 
 

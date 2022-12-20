@@ -1,13 +1,11 @@
 const form = document.querySelector("form");
-
-
 const inputLoginEmail = document.querySelector(".email");
 const inputLoginPassword = document.querySelector(".password");
 
+const API_URL = "http://localhost:9090/astrology/v1/user/login";
 
-
-function login (){
-    fetch("http://localhost:9090/astrology/v1/user/login",
+async function login(){
+  const response = await fetch(API_URL,
     {
         headers:{
             'Accept':'application/json',
@@ -20,11 +18,8 @@ function login (){
             credentials: 'include',
         })
     })
-    .then(function(res){console.log(res)})
-    .catch(function(res){console.log(res)})
-    };
-
-
+    return response.json();
+};
 
 
 function clean(){
@@ -34,10 +29,11 @@ function clean(){
 
 form.addEventListener('submit', function (event){
     event.preventDefault();
-    login();
-
-
-
-    
-  //  clean();
+    login().then((data) => {window.localStorage.setItem('token', JSON.stringify(data.token));});    
+    console.log(window.localStorage.getItem('token'));
+    clean();
+ //   window.location.pathname = "/get_chart.html"
 });
+
+
+
