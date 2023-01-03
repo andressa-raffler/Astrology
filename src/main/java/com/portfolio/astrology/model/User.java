@@ -22,7 +22,7 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank(message = "The name field is required")

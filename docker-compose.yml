@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
-    volumes: 
+    volumes:
       - db:/var/lib/postgresql/data
 
   app:
@@ -21,12 +21,12 @@ services:
     depends_on:
       - db
     ports:
-      - '8080:9090'  
+      - '8080:9091'
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update       
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
 
 volumes:

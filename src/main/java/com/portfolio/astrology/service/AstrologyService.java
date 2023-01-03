@@ -7,6 +7,7 @@ import com.portfolio.astrology.response.AstrologyResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,9 @@ public class AstrologyService {
     @Autowired
     PersonRepository personRepository;
 
+    @Value("${apiKey}")
+    private String apiKey;
+
     public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute, String queryLocation,
                                     int houses) {
 
@@ -33,7 +37,7 @@ public class AstrologyService {
                         birthDay + "|" + birthMonth + "|" +
                         birthYear + "|" + birthHour +
                         "|" + birthMinute + "&querylocation=" + queryLocation +
-                        "&houses=" + houses + "&key=83eef92f793aea413bbc692454f1de97f6b992d1568e0a8a30c24a46",
+                        "&houses=" + houses + "&key="+apiKey,
                 AstrologyResponse.class);
         return getAstrologyFromAstrologyResponse(Objects.requireNonNull(response.getBody()));
 
