@@ -57,6 +57,12 @@ public class PersonController {
         return personService.savePerson(personDTO, request);
     }
 
+    @PostMapping("/{bearer}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageResponseDTO saveNewPersonURL(@PathVariable("bearer") String bearer, @RequestBody @Valid PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
+        return personService.savePerson(bearer, personDTO, request);
+    }
+
     @PutMapping("/{id}")
     public MessageResponseDTO updatePersonById(@PathVariable("id") Long id, @Valid @RequestBody PersonDTO personDTO, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.updatePersonById(id, personDTO, request);

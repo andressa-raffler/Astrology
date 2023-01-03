@@ -30,9 +30,8 @@ function clean(){
 form.addEventListener('submit', function (event){
     event.preventDefault();
     login().then((data) => {window.localStorage.setItem('token', JSON.stringify(data.token));});    
-    console.log(window.localStorage.getItem('token'));
     clean();
- //   window.location.pathname = "/get_chart.html"
+    window.location.pathname = "/new_chart.html"
 });
 
 

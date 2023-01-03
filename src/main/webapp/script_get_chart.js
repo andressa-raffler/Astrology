@@ -6,6 +6,7 @@ const chartsContainer = document.querySelector("#charts-container");
 async function getAllCharts(){
     const response = await fetch(url);
     const data = await response.json();
+    const authToken = localStorage.get("token");
     
     loadingElement.classList.add("hide");
 
