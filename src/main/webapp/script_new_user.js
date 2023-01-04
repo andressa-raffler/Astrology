@@ -20,8 +20,6 @@ function newUser (){
 
         })
     })
-    .then(function(res){console.log(res)})
-    .catch(function(res){console.log(res)})
     };
 
 function clean(){
@@ -34,7 +32,7 @@ form.addEventListener('submit', function (event){
     event.preventDefault();
     newUser();
     clean();
-
+    window.location.pathname = "/login.html" 
 });
 
 

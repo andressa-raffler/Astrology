@@ -23,6 +23,9 @@ public class House implements Serializable {
     @Column(nullable = false, length = 100)
     long longitudeSpeed;
 
+    @Column
+    private String position;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "astrology_id", referencedColumnName = "id")
     @JsonIgnore

@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class Person implements Serializable {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank(message = "The name field is required")
@@ -34,7 +34,6 @@ public class Person implements Serializable {
     @Column(nullable = false, length = 2)
     private int birthHour;
 
- //   @NotEmpty(message = "The birth minute field is required")
     @Column(nullable = false, length = 2)
     private int birthMinute;
 

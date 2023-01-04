@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,12 +36,12 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable() //CSRF é uma segurança para hackers, autenticaçao via token ja esta protegida
                         .authorizeHttpRequests()
-                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login")
-                        .permitAll()
+                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login").permitAll()
                         .anyRequest().authenticated().and().cors() //o cors permite que eu acesse a api por requisiçoes externas
                         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Spring nao deve criar uma sessao
                         .and().addFilterBefore(new SecurityFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+
     }
 
 

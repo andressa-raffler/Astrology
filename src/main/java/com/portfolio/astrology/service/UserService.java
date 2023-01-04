@@ -84,8 +84,12 @@ public class UserService {
                         .message(message)
                         .build();
         }
-        private User verifyIfUserExists(Long id) throws UserNotFoundException {
+        public User verifyIfUserExists(Long id) throws UserNotFoundException {
                 return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
+        }
+
+        public User verifyIfUserExists(String email) throws UserNotFoundException {
+                return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
         }
 
         private boolean validPassword(User user, String password){

@@ -5,16 +5,24 @@ const inputBirthHour = document.querySelector(".birthHour");
 const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
+const authToken = window.localStorage.getItem('token');
 
 
-function newChart (){
-    fetch("http://localhost:9090/astrology/v1/user/",
+const API_URL = "http://localhost:9090/astrology/v1/user/person/";
+
+
+async function newChart (){
+
+    const response = await fetch( API_URL,
     {
+        method: "POST",
         headers:{
+            'Authorization': authToken,
             'Accept':'application/json',
             'Content-Type': 'application/json'
+            
         },
-        method: "POST",
+
         body: JSON.stringify({
             name: inputName.value,
             birthDate: inputBirthDate.value,
@@ -24,9 +32,8 @@ function newChart (){
             state: inputSate.value
         })
     })
-    .then(function(res){console.log(res)})
-    .catch(function(res){console.log(res)})
-    };
+return response.json();
+};
 
 function clean(){
     inputName.value = "";
@@ -39,9 +46,13 @@ function clean(){
 
 form.addEventListener('submit', function (event){
     event.preventDefault();
-    newChart();
-    clean();
-
+    newChart().then((data) => {
+        window.localStorage.setItem('person_name', inputName.value);
+        window.location.pathname = "/chart.html"
+        clean();
+    })
 });
+
+
 
 

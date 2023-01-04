@@ -9,4 +9,10 @@ public class PersonNotFoundException extends Exception {
         super("Person whit id: " +id+" was not found!");
     }
 
+    public PersonNotFoundException(String name) {
+        super("Person: " +name+" was not found!");
+    }
+
+
+
 }

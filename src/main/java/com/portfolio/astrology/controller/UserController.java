@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> validatePassword(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+    public ResponseEntity<Token> login(@RequestBody UserDTO userDTO) throws UserNotFoundException {
         return userService.generateToken(userDTO.getEmail(), userDTO.getPassword());
 
     }
