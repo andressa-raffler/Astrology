@@ -117,6 +117,13 @@ body {
     margin: 2em 0 1em 0;
 }
 
+.content{
+    font-size: 15px;
+    font-weight: 100;
+    color: var(--green-primary);    
+    margin: 2em 0 1em 0;
+}
+
 input{
     width: 250px;
     height: 25px;
@@ -137,5 +144,12 @@ a{
     background-color:var(--pink-secundary);
     width: 150px;
     height: 25px; 
+}
+h3{
+
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--green-secundary);
+    gap: 0.5em;    
 }
 

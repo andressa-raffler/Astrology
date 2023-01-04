@@ -18,7 +18,7 @@ async function login(){
             credentials: 'include',
         })
     })
-    return response.json();
+return response.json();
 };
 
 
@@ -29,9 +29,11 @@ function clean(){
 
 form.addEventListener('submit', function (event){
     event.preventDefault();
-    login().then((data) => {window.localStorage.setItem('token', JSON.stringify(data.token));});    
-    clean();
-    window.location.pathname = "/new_chart.html"
+    login().then((data) => { //.THEN -> Tudo o que está dentro se torna sincrono
+        window.localStorage.setItem('token', data.token);
+        clean();
+        window.location.pathname = "/new_chart.html"   
+    });    
 });
 
 

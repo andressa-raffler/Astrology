@@ -37,17 +37,13 @@ public class SecurityConfig {
         http.csrf().disable() //CSRF é uma segurança para hackers, autenticaçao via token ja esta protegida
                         .authorizeHttpRequests()
                         .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login").permitAll()
-                  //      .antMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated().and().cors() //o cors permite que eu acesse a api por requisiçoes externas
                         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Spring nao deve criar uma sessao
                         .and().addFilterBefore(new SecurityFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers("/swagger-ui.html , /**.html", "/v3/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
-//    }
+
 
 /*
     Configuracoes de Autenticacao: AuthenticationManagerBuilder

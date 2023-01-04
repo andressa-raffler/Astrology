@@ -15,17 +15,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/astrology/v1/person")
+@RequestMapping("/astrology/v1/user/person")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonController {
 
     PersonService personService;
     AstrologyService astrologyService;
-   // private HttpServletRequest request;
+    private HttpServletRequest request;
 
 
     @GetMapping("/{id}")
@@ -47,7 +48,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public  List<String> getZodiacChart(@PathVariable("name") String name, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+    public  List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 

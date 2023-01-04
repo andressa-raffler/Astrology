@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +31,7 @@ public class PersonService {
     private AstrologyService astrologyService;
     private UserService userService;
     private TokenService tokenService;
+
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
@@ -88,7 +90,7 @@ public class PersonService {
         List<Person> allPeoleByUser = getUsersPeopleFromRequest(request);
         List<String> allChartsByUser = new ArrayList<>();
         for (Person person : allPeoleByUser ) {
-            List<String> chart =  getZodiacChart(person.getName(), request);
+            List<Object> chart =  getZodiacChart(person.getName(), request);
             allChartsByUser.add(chart.toString());
         }
         return allChartsByUser;
@@ -97,7 +99,38 @@ public class PersonService {
 
 
 
-    public List<String> getZodiacChart(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+
+
+    public List<Object> getZodiacChart(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+        Person personSaved = getPersonFromUser(personName, request);
+        Zodiac[] zodiacList = Zodiac.values();
+        List<Planet> planets;
+        List<House> houses;
+        List<Object> zodiacChart = new ArrayList<>();
+        planets = personSaved.getAstrology().getPlanets();
+        for (Planet planet : planets) {
+            for (Zodiac zodiac : zodiacList) {
+                if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
+                    zodiacChart.add(planet);
+                }
+            }
+        }
+        houses = personSaved.getAstrology().getHouses();
+        for (House house : houses) {
+            for (Zodiac zodiac : zodiacList) {
+                if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
+                    zodiacChart.add(house);
+                }
+            }
+        }
+
+        return zodiacChart;
+    }
+
+
+
+
+    public List<String> getZodiacChart2(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         Person personSaved = getPersonFromUser(personName, request);
         Zodiac[] zodiacList = Zodiac.values();
         List<Planet> planets;
@@ -148,14 +181,12 @@ public class PersonService {
 
     private Person getPersonFromUser(String name, HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
         List<Person> personList = getUsersPeopleFromRequest(request);
-        for (Person person: personList) {
-            if (person.getName().equals(name)){
+        for (Person person : personList) {
+            if (person.getName().equals(name)) {
                 return person;
-            }else {
-                throw new PersonNotFoundException(name);
             }
         }
-        throw new UserNotFoundException(name);
+        throw new PersonNotFoundException(name);
     }
 
     private Person getPersonFromUser(long id, HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {

@@ -1,4 +1,4 @@
-const url = "http://localhost:9090/astrology/v1/person/zodiac-chart";
+const url = "http://localhost:9090/astrology/v1/user/person/zodiac-chart";
 
 const loadingElement = document.querySelector("#loading");
 const chartsContainer = document.querySelector("#charts-container");
