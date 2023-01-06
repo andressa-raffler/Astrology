@@ -173,7 +173,7 @@ public class PersonService {
         return personRepository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
     }
 
-    private List<Person> getUsersPeopleFromRequest(HttpServletRequest request) throws UserNotFoundException {
+    public List<Person> getUsersPeopleFromRequest(HttpServletRequest request) throws UserNotFoundException {
         UserDTO userDTO = getUserDTOFromToken(request);
         return personRepository.findAllPersonFromOneUser(userDTO.getEmail()).stream().toList();
     }
@@ -202,7 +202,6 @@ public class PersonService {
     }
 
 
-
     private UserDTO getUserDTOFromToken(HttpServletRequest request) throws UserNotFoundException {
         String token = tokenService.getTokenFromRequest(request);
         String email =  tokenService.getEmailLogado(token);
@@ -215,6 +214,5 @@ public class PersonService {
         User userSaved = userService.verifyIfUserExists(email);
         return userMapper.toDTO(userSaved);
     }
-
 
 }

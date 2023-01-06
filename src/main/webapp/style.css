@@ -71,13 +71,17 @@ body {
 .container__index{
     text-decoration: none;
     color: var(--green-primary);
+    display: block;
+    text-decoration: none;
+    margin-bottom: 1em;
     display: flex;
     text-align: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.5em;    
-}
+    gap: 0.5em;  
+} 
+
 
 
 .secundary__title{
@@ -88,9 +92,16 @@ body {
 
 
 .small__title{
-    font-size: 10px;
+    font-size: 18px;
     font-weight: 400;
     color: var(--green-secundary);
+    text-decoration: none;
+    margin-bottom: 1em;
+    display: col;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;    
 
 }
 

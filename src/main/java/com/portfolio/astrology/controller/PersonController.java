@@ -5,6 +5,7 @@ import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.exception.UserNotFoundException;
+import com.portfolio.astrology.model.Person;
 import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.PersonService;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,12 @@ public class PersonController {
     private HttpServletRequest request;
 
 
+    @GetMapping
+    public List<Person> listAllPeople(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
+        return personService.getUsersPeopleFromRequest(request);
+    }
+
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDTO findPersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
@@ -48,7 +55,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public  List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
+    public List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 
@@ -56,12 +63,6 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
      public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
         return personService.savePerson(personDTO, request);
-    }
-
-    @PostMapping("/{bearer}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewPersonURL(@PathVariable("bearer") String bearer, @RequestBody @Valid PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
-        return personService.savePerson(bearer, personDTO, request);
     }
 
     @PutMapping("/{id}")
