@@ -31,7 +31,6 @@ public class PersonService {
     private AstrologyService astrologyService;
     private UserService userService;
     private TokenService tokenService;
-
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
@@ -59,9 +58,17 @@ public class PersonService {
 
 
     public MessageResponseDTO updatePersonById(Long personId, PersonDTO updatedDTOPerson, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
-        Person person = getPersonFromUser(personId, request);
-        Person personToUpdate = personMapper.toModel(updatedDTOPerson);
-        Person updatedPerson = personRepository.saveAndFlush(personToUpdate);
+        Person savedPerson = getPersonFromUser(personId, request);
+        Person updatedPerson = personMapper.toModel(updatedDTOPerson);
+        savedPerson.setName(updatedPerson.getName());
+        savedPerson.setId(personId);
+        savedPerson.setBirthDate(updatedPerson.getBirthDate());
+        savedPerson.setBirthHour(updatedPerson.getBirthHour());
+        savedPerson.setBirthMinute(updatedPerson.getBirthMinute());
+        savedPerson.setCity(updatedPerson.getCity());
+        savedPerson.setState(updatedPerson.getState());
+        savedPerson.setAstrology(getAstrologyApiPath(updatedPerson));
+        personRepository.saveAndFlush(savedPerson);
         return createMessageResponse("Person with id " + personId + " was updated!");
     }
 
@@ -194,11 +201,9 @@ public class PersonService {
         for (Person person: personList) {
             if (person.getId() == id){
                 return person;
-            }else {
-                throw new PersonNotFoundException(id);
             }
         }
-        throw new UserNotFoundException(id);
+        throw new PersonNotFoundException(id);
     }
 
 

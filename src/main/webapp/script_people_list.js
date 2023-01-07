@@ -9,7 +9,8 @@ const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
 
-window.onload = async function loadChart() {
+
+window.onload = async function loadPeopleList() {
   await fetch("http://localhost:9090/astrology/v1/user/person", {
     method: "GET",
     headers: {
@@ -22,51 +23,32 @@ window.onload = async function loadChart() {
       return response.json();
     })
     .then((data) => {
-      let birthNames = data;
-      let birthDates = data;
-      birthNames.map(function (birthName) {
+    printPeopleList(data);
+  })
+}
 
-        let li = document.createElement("li");
-        let name = document.createElement("h2");
-        let birthDate = document.createElement("h3");
-        let birthHour = document.createElement("h3");
-        let birthMinute = document.createElement("h3");
-        let city = document.createElement("h3");
-        let state = document.createElement("h3");
-
-        name.innerHTML         = `${birthName.name}`        ;
-        birthDate.innerHTML    = `${person.birthDate}`   ;
-        birthHour.innerHTML    = `${person.birthHour}`   ;
-        birthMinute.innerHTML  = `${person.birthMinute}` ;
-        city.innerHTML         = `${person.city}`        ;
-        state.innerHTML        = `${person.state}`       ;
-
-        li.appendChild(name);
-        li.appendChild(birthDate);
-        li.appendChild(birthHour);
-        li.appendChild(birthMinute);
-        li.appendChild(city);
-        li.appendChild(state);
-
-        list.appendChild(li);
-        ul.appendChild(list);
-
-      });
-
-
+function printPeopleList(val){
+    let output = document.getElementById("stats-output");
+    let html = '';
+    val.forEach((person, index) =>{
+        var id =  person.id;
+        html += `<tr>
+            <td>${person.id}       </td>
+            <td>${person.name}       </td>
+            <td>${person.birthDate}  </td>
+            <td>${person.birthHour}  </td>
+            <td>${person.birthMinute}</td>
+            <td>${person.city}       </td>
+            <td>${person.state}      </td>
+            <td>
+              <button type="button" class="button green edit" id="${person.id}">edit</button>
+              <button type="button" class="button red" id="delete" onclick="deletePerson(${id})">delete</button>
+            </td>
+            </tr>
+        `;
     })
-
-
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
-
-
-
-
-
+    output.innerHTML = html;
+}
 
 const openModal = () => document.getElementById('modal')
     .classList.add('active')
@@ -74,38 +56,25 @@ const openModal = () => document.getElementById('modal')
 const closeModal = () => document.getElementById('modal')
     .classList.remove('active')
 
-
-
 document.getElementById('newChart')
     .addEventListener('click', openModal)
 
-document.getElementById('modalClose')
+document.getElementById('cancel')
     .addEventListener('click', closeModal)
 
 document.getElementById('save')
-  .addEventListener('click', save)    
+  .addEventListener('click', saveNewPerson) 
 
-function save(){
-  newChart().then((data) => {
-    clean();
+function saveNewPerson(){
+  calculateNewChart().then((data) => {
+    cleanNewPersonForm();
     closeModal;
     window.location.pathname = "/people_list.html"
+    //"alert('did stuff inline');"
   })
 }
 
-function clean(){
-  inputName.value = "";
-  inputBirthDate.value = "";
-  inputBirthHour.value = "";
-  inputBirthMinute.value = "";
-  inputCity.value = "";
-  inputSate.value = "";
-};
-
-
-
-async function newChart(){
-  
+async function calculateNewChart(){
   const response = await fetch( "http://localhost:9090/astrology/v1/user/person/",
   {
       method: "POST",
@@ -127,4 +96,34 @@ async function newChart(){
 return response.json();
 };
 
+function cleanNewPersonForm(){
+  inputName.value = "";
+  inputBirthDate.value = "";
+  inputBirthHour.value = "";
+  inputBirthMinute.value = "";
+  inputCity.value = "";
+  inputSate.value = "";
+};
+
+function deletePerson(person_id){
+  console.log(person_id)
+  var id = person_id.data
+  console.log(id)
+  sendPersonDeleteToBackend(person_id).then((data) => {
+    console.log('dentro do send')
+    //window.location.pathname = "/people_list.html"
+  })
+}
+
+async function sendPersonDeleteToBackend(person_id){
+  await fetch("http://localhost:9090/astrology/v1/user/person/"+person_id,
+  {
+      method: "DELETE",
+      headers:{
+          'Authorization': authToken,
+          'Accept':'application/json',
+          'Content-Type': 'application/json'
+      },
+  })
+};
 

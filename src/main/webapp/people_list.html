@@ -50,6 +50,7 @@
         <table class="records">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Person</th>
                     <th>Birth Date</th>
                     <th>Birth Hour</th>
@@ -59,23 +60,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="content" id="people"></td>    
-                    <tr><td class="birthName">Name</td></tr>
-                    <tr><td class="birthDate">birth date here</td></tr>
-                    <tr><td class="birthHour">Birth Hour here</td></tr>
-                    <tr><td class="birthMinute">Birth Hour here</td></tr>  
-                    <tr><td class="birthCity">Birth Hour here</td></tr>  
-                    <tr><td class="birthState">Birth Hour here</td></tr>     
-
-                   
-
-                    <td>
-                        <button type="button" class="button green">edit</button>
-                        <button type="button" class="button red">delete</button>
-                    </td>
-                </tr>
+            <tbody id="stats-output">
             </tbody>
         </table>
 
@@ -91,12 +76,12 @@
                     <input type="number" class="birthHour modal-field"   name="birth_hour"   placeholder="Birth Hour"   min="00" max="23"   >
                     <input type="number" class="birthMinute modal-field" name="birth_minute" placeholder="Birth Minute" min="00" max="59"   >
                     <input type="text"   class="city modal-field"        name="city"         placeholder="Natal City"                       >
-                    <input type="text"   class="state modal-field"             name="state"        placeholder="Natal State"                      >
+                    <input type="text"   class="state modal-field"       name="state"        placeholder="Natal State"                      >
 
                 </form>
                 <footer class="modal-footer">
                     <button id="save" class="button green">Save  </button>
-                    <button id="cancel" class="button orange"   >Cancel</button>
+                    <button id="cancel" class="button red">Cancel </button>
                 </footer>
             </div>
         </div>
