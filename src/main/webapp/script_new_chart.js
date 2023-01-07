@@ -13,7 +13,7 @@ const API_URL = "http://localhost:9090/astrology/v1/user/person/";
 
 async function newChart (){
 
-    const response = await fetch( API_URL,
+    const response = await fetch( "http://localhost:9090/astrology/v1/user/person/",
     {
         method: "POST",
         headers:{
