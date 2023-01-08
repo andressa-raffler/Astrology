@@ -8,8 +8,65 @@
     opacity: 0;
     z-index: -1;
 }
+.modalFilled{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    z-index: -1;
+}
 
 .modal.active{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    z-index: -1;
+}
+
+.modalFilled.active{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    z-index: -1;
+}
+
+.modal{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    z-index: -1;
+}
+.modalFilled{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    z-index: -1;
+}
+
+.modal.active{
+    opacity: 1;
+    z-index: 1;
+}
+.modalFilled.active{
     opacity: 1;
     z-index: 1;
 }
@@ -25,6 +82,7 @@
     box-shadow: 1px 1px 10px black;
 }
 
+
 .modal-header{
     display: flex;
     position: relative;
@@ -33,7 +91,6 @@
     line-height: 40px;
     font-size: 1rem;
 }
-
 
 
 .modal-close{
@@ -84,6 +141,25 @@
 
 @media (max-width:480px){
     .modal{
+        top:100%;
+        transition: all 1s ease;
+    }
+    .modal.active{
+        top:0;
+    }
+    .modal-content{
+        margin:0;
+        width:100%;
+        position:fixed;
+    }
+    .modal-field{
+        width:100%;
+    }
+}
+
+
+@media (max-width:480px){
+    .modalFilled{
         top:100%;
         transition: all 1s ease;
     }

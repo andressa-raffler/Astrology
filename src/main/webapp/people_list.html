@@ -85,6 +85,28 @@
                 </footer>
             </div>
         </div>
+
+        <div class="modalFilled" id="modalFilled">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>Edit Chart</h2>
+                    <span class="modal-close" id="modalClose">&#10006;</span>
+                </header>
+                <form class="modal-form">
+                    <input type="text"   id="id_name"         class="name modal-field"           placeholder="Name"                                >
+                    <input type="date"   id="id_birth_date"   class="birthDate modal-field"      placeholder="Birth Date"                          >
+                    <input type="number" id="id_birth_hour"   class="birthHour modal-field"      placeholder="Birth Hour"   min="00" max="23"      >
+                    <input type="number" id="id_birth_minute" class="birthMinute modal-field"    placeholder="Birth Minute" min="00" max="59"      >
+                    <input type="text"   id="id_city"         class="city modal-field"           placeholder="Natal City"                           >
+                    <input type="text"   id="id_state"        class="state modal-field"          placeholder="Natal State"                          >
+                </form>
+                <footer class="filledModal-footer">
+                    <button id="saveEdit" class="button green">Save  </button>
+                    <button id="cancelEdit" class="button red">Cancel </button>
+                </footer>
+            </div>
+        </div>
+
     </main>
     <footer>
         Copyright &copy; Andressa Raffler

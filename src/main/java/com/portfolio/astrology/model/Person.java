@@ -48,7 +48,7 @@ public class Person implements Serializable {
     @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Astrology astrology;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "users_id", referencedColumnName = "id")
     @JsonIgnore
     private User users;
