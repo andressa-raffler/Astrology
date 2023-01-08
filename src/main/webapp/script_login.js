@@ -32,7 +32,7 @@ form.addEventListener('submit', function (event){
     login().then((data) => { //.THEN -> Tudo o que está dentro se torna sincrono
         window.localStorage.setItem('token', data.token);
         clean();
-        window.location.pathname = "/new_chart.html"   
+        window.location.pathname = "/menu.html"   
     });    
 });
 

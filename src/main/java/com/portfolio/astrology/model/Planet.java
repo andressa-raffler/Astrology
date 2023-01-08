@@ -2,6 +2,8 @@ package com.portfolio.astrology.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,7 +28,7 @@ public class Planet implements Serializable {
     @Column
     private String position;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinColumn(name="astrology_id",  referencedColumnName = "id")
     @JsonIgnore
     private Astrology astrology;

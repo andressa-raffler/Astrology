@@ -5,6 +5,7 @@ import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.exception.UserNotFoundException;
+import com.portfolio.astrology.model.Person;
 import com.portfolio.astrology.service.AstrologyService;
 import com.portfolio.astrology.service.PersonService;
 import lombok.AllArgsConstructor;
@@ -29,11 +30,17 @@ public class PersonController {
     private HttpServletRequest request;
 
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PersonDTO findPersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
-        return personService.findById(id, request);
+    @GetMapping
+    public List<Person> listAllPeople(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
+        return personService.getUsersPeopleFromRequest(request);
     }
+
+
+//    @GetMapping("/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public PersonDTO findPersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+//        return personService.findById(id, request);
+//    }
 
     @GetMapping("/{name}")
     @ResponseStatus(HttpStatus.OK)
@@ -48,7 +55,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public  List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
+    public List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 
@@ -58,19 +65,13 @@ public class PersonController {
         return personService.savePerson(personDTO, request);
     }
 
-    @PostMapping("/{bearer}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewPersonURL(@PathVariable("bearer") String bearer, @RequestBody @Valid PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
-        return personService.savePerson(bearer, personDTO, request);
-    }
-
     @PutMapping("/{id}")
     public MessageResponseDTO updatePersonById(@PathVariable("id") Long id, @Valid @RequestBody PersonDTO personDTO, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.updatePersonById(id, personDTO, request);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public MessageResponseDTO deletePersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.deletePersonById(id, request);
     }

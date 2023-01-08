@@ -1,0 +1,115 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="script_people_list.js" defer></script>
+    <title>Raffler Astrology</title>
+</head>
+<body>
+    <section class="container primary">
+        <div class="container__box">
+            <h1 class="container__title">Raffler Astrology</h1>
+            <h2 class="secundary__title">Select one person:</h2>
+            <ul class="content" id="people"></ul>
+            <a class="small__title" href="/menu.html">Back to menu</a>
+        </div>   
+    </section>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,700;1,200;1,800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/records.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <script src="script_people_list.js" defer></script>
+    <title>Raffler Astrology</title>
+</head>
+<body>
+    <header>
+        <h1 class="header-title">Raffler Astrology</h1>
+    </header>
+    <main>
+        <button type="button" class="button orange mobile" id="newChart">Generate new chart</button>
+        <table class="records">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Person</th>
+                    <th>Birth Date</th>
+                    <th>Birth Hour</th>
+                    <th>Birth Minute</th>
+                    <th>Natal City</th>
+                    <th>Natal State</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="stats-output">
+            </tbody>
+        </table>
+
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>New Chart</h2>
+                    <span class="modal-close" id="modalClose">&#10006;</span>
+                </header>
+                <form class="modal-form">
+                    <input type="text"   class="name modal-field"        name="name"         placeholder="Name"                             >
+                    <input type="date"   class="birthDate modal-field"   name="birth_date"   placeholder="Birth Date"                       >
+                    <input type="number" class="birthHour modal-field"   name="birth_hour"   placeholder="Birth Hour"   min="00" max="23"   >
+                    <input type="number" class="birthMinute modal-field" name="birth_minute" placeholder="Birth Minute" min="00" max="59"   >
+                    <input type="text"   class="city modal-field"        name="city"         placeholder="Natal City"                       >
+                    <input type="text"   class="state modal-field"       name="state"        placeholder="Natal State"                      >
+
+                </form>
+                <footer class="modal-footer">
+                    <button id="save" class="button green">Save  </button>
+                    <button id="cancel" class="button red">Cancel </button>
+                </footer>
+            </div>
+        </div>
+
+        <div class="modalFilled" id="modalFilled">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>Edit Chart</h2>
+                    <span class="modal-close" id="modalClose">&#10006;</span>
+                </header>
+                <form class="modal-form">
+                    <input type="text"   id="id_name"         class="name modal-field"           placeholder="Name"                                >
+                    <input type="date"   id="id_birth_date"   class="birthDate modal-field"      placeholder="Birth Date"                          >
+                    <input type="number" id="id_birth_hour"   class="birthHour modal-field"      placeholder="Birth Hour"   min="00" max="23"      >
+                    <input type="number" id="id_birth_minute" class="birthMinute modal-field"    placeholder="Birth Minute" min="00" max="59"      >
+                    <input type="text"   id="id_city"         class="city modal-field"           placeholder="Natal City"                           >
+                    <input type="text"   id="id_state"        class="state modal-field"          placeholder="Natal State"                          >
+                </form>
+                <footer class="filledModal-footer">
+                    <button id="saveEdit" class="button green">Save  </button>
+                    <button id="cancelEdit" class="button red">Cancel </button>
+                </footer>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+        Copyright &copy; Andressa Raffler
+    </footer>
+</body>
+</html>
