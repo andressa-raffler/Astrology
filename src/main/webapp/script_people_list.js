@@ -9,7 +9,6 @@ const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
 
-
 window.onload = async function loadPeopleList() {
   await fetch("http://localhost:9090/astrology/v1/user/person", {
     method: "GET",
@@ -32,27 +31,6 @@ function printPeopleList(val){
     let output = document.getElementById("stats-output");
     let html = '';
     val.forEach((person, index) =>{
-
-      var personId          = person.id         ;
-      var personName        = person.name      ;
-      var personBirthDate   = person.birthDate  ;
-      var personBirthHour   = person.birthHour  ;
-      var personBirthMinute = person.birthMinute;
-      var personCity        = person.city      ;
-      var personState       = person.state     ;
-
-
-
-      
-      
-      
-      
-      
-      
-      
-
-
-
         html += `<tr>
             <td>${person.id}         </td>
             <td>${person.name}       </td>
@@ -62,16 +40,10 @@ function printPeopleList(val){
             <td>${person.city}       </td>
             <td>${person.state}      </td>
             <td>
-              <button type="button" class="button green" id="edit"   onclick="openEditModal(${personId         },
-                ${personName       },
-                ${personBirthDate  },
-                ${personBirthHour  },
-                ${personBirthMinute},
-                ${personCity       },
-                ${personState      }
-              )">edit</button>
-              <button type="button" class="button red"   id="delete" onclick="deletePerson(${person.id})">delete</button>
-            </td>
+              <button type="button" class="button orange"   id="open" onclick="openChart('${person.name}')">open</button>
+              <button type="button" class="button green"    id="edit"   onclick="openEditModal('${person.id}','${person.name}','${person.birthDate}','${person.birthHour}','${person.birthMinute}','${person.city}','${person.state}' )">edit</button>
+              <button type="button" class="button red"      id="delete" onclick="deletePerson(${person.id})">delete</button>
+              </td>
             </tr>
         `;
     })
@@ -110,6 +82,7 @@ function saveNewPerson(){
     calculateNewChart().then((data) => {
     cleanNewPersonForm();
     document.getElementById('modal').classList.remove('active')
+    window.location.pathname = "/people_list.html"
   })
 }
 
@@ -165,24 +138,26 @@ async function sendPersonDeleteToBackend(person_id){
   })
 };
 
-function openEditModal(id, name, birthDate, birthHour, birthMinute, city, state){
+function openEditModal(id, name, birthdate, birthHour, birthMinute, city, state){
   document.getElementById('modalFilled').classList.add('active');
-  document.getElementById("id_name"        ).value = person.id
-  document.getElementById("id_birth_date"  ).value = person.birthDate
-  document.getElementById("id_birth_hour"  ).value = person.birthHour
-  document.getElementById("id_birth_minute").value = person.birthMinute
-  document.getElementById("id_city"        ).value = person.city
-  document.getElementById("id_state"       ).value = person.state
+  document.getElementById("id_name"        ).value = name
+  document.getElementById("id_birth_date"  ).value = birthdate
+  document.getElementById("id_birth_hour"  ).value = birthHour
+  document.getElementById("id_birth_minute").value = birthMinute
+  document.getElementById("id_city"        ).value = city
+  document.getElementById("id_state"       ).value = state
+  window.localStorage.setItem('edited_person_id', id);
 }
 
 
 function editPerson(){
-  editChart().then((data) => {
-    //cleanNewPersonForm;
-    //window.location.pathname = "/people_list.html"
-    window.alert("Person with id: "+printId+" was edited");
+  person_id = window.localStorage.getItem('edited_person_id');
+  editChart(person_id).then((data) => {
+    window.alert("Person with id: "+person_id+" was edited");
     document.getElementById('modalFilled').classList.remove('active');
-    
+    window.localStorage.removeItem('edited_person_id');
+    window.location.pathname = "/people_list.html"
+    cleanNewPersonForm;
   })
 
 }
@@ -199,13 +174,19 @@ async function editChart(person_id){
 
       },
       body: JSON.stringify({
-          name: inputName.value,
-          birthDate: inputBirthDate.value,
-          birthHour: inputBirthHour.value,
-          birthMinute: inputBirthMinute.value,
-          city: inputCity.value,
-          state: inputSate.value
+          name: document.getElementById("id_name").value ,
+          birthDate:    document.getElementById("id_birth_date"  ).value ,
+          birthHour:    document.getElementById("id_birth_hour"  ).value ,
+          birthMinute:  document.getElementById("id_birth_minute").value ,
+          city:         document.getElementById("id_city"        ).value ,
+          state:        document.getElementById("id_state"       ).value 
       })
   })
+
 return response.json();
 };
+
+function openChart(name){
+  window.localStorage.setItem('chart_person_name', name);
+  window.location.pathname = "/chart.html"
+}

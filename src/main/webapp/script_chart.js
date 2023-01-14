@@ -1,6 +1,7 @@
 const ul = document.getElementById("planets");
 const list = document.createDocumentFragment();
-const person_name = window.localStorage.getItem("person_name");
+const person_name = window.localStorage.getItem("chart_person_name");
+window.localStorage.removeItem('chart_person_name');
 const API_URL =
   "http://localhost:9090/astrology/v1/user/person/zodiac-chart/" + person_name;
 const authToken = window.localStorage.getItem("token");
