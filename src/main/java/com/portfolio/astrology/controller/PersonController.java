@@ -35,13 +35,6 @@ public class PersonController {
         return personService.getUsersPeopleFromRequest(request);
     }
 
-
-//    @GetMapping("/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public PersonDTO findPersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
-//        return personService.findById(id, request);
-//    }
-
     @GetMapping("/{name}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDTO findPersonById(@PathVariable("name") String name, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
