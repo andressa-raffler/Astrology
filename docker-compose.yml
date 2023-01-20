@@ -13,11 +13,11 @@ services:
     volumes: 
       - db:/var/lib/postgresql/data
 
-  app:
+  Astrology:
     image: andressa-raffler/astrology:latest
     build:
       context: .
-    container_name: app
+    container_name: Astrology
     depends_on:
       - db
     ports:
@@ -26,8 +26,18 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update       
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
+  AstrologyFront:
+    image: andressa-raffler/astrology-front:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+    container_name: AstrologyFront
+    depends_on:
+      - Astrology
+    ports:
+      - '8090:80'
 
 volumes:
   db:
