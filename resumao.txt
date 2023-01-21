@@ -1,0 +1,10 @@
+o que é docker?
+o que ele resolve?
+qual a vantagem do docker em relação a virtual machine?
+
+O que é uma imagem?
+O que é um container?
+
+O que é docker-compose?
+
+Como rodar meu app sem o docker?
