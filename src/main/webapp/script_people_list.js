@@ -10,6 +10,7 @@ const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
 
 window.onload = async function loadPeopleList() {
+  console.log(authToken);
   await fetch("http://localhost:9090/astrology/v1/user/person", {
     method: "GET",
     headers: {
@@ -187,6 +188,6 @@ return response.json();
 };
 
 function openChart(name){
-  window.localStorage.setItem('chart_person_name', name);
+  window.localStorage.setItem('chart_person_name', name_person);
   window.location.pathname = "/chart.html"
 }
