@@ -2,12 +2,11 @@ const ul = document.getElementById("planets");
 const list = document.createDocumentFragment();
 const person_name = window.localStorage.getItem("chart_person_name");
 window.localStorage.removeItem('chart_person_name');
-const API_URL =
-  "http://localhost:9090/astrology/v1/user/person/zodiac-chart/" + person_name;
+const API_URL = "http://localhost:8090/astrology/v1/user/person/zodiac-chart";
 const authToken = window.localStorage.getItem("token");
 
 window.onload = async function loadChart() {
-  await fetch(API_URL, {
+  await fetch(API_URL+"/"+person_name, {
     method: "GET",
     headers: {
       Authorization: authToken,

@@ -8,9 +8,10 @@ const inputBirthHour = document.querySelector(".birthHour");
 const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
+const apiUrl = "http://localhost:8090/astrology/v1/user/person"
 
 window.onload = async function loadPeopleList() {
-  await fetch("http://localhost:9090/astrology/v1/user/person", {
+  await fetch(apiUrl, {
     method: "GET",
     headers: {
       Authorization: authToken,
@@ -87,7 +88,7 @@ function saveNewPerson(){
 }
 
 async function calculateNewChart(){
-  const response = await fetch( "http://localhost:9090/astrology/v1/user/person/",
+  const response = await fetch( apiUrl,
   {
       method: "POST",
       headers:{
@@ -127,7 +128,7 @@ function deletePerson(person_id){
 }
 
 async function sendPersonDeleteToBackend(person_id){
-  await fetch("http://localhost:9090/astrology/v1/user/person/"+person_id,
+  await fetch(apiUrl+"/"+person_id,
   {
       method: "DELETE",
       headers:{
@@ -164,7 +165,7 @@ function editPerson(){
 
 
 async function editChart(person_id){
-  const response = await fetch( "http://localhost:9090/astrology/v1/user/person/"+person_id,
+  const response = await fetch( apiUrl+"/"+person_id,
   {
       method: "PUT",
       headers:{

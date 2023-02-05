@@ -2,11 +2,11 @@ const form = document.querySelector("form");
 const inputName = document.querySelector(".name");
 const inputEmail = document.querySelector(".email");
 const inputPassword = document.querySelector(".password");
-
+const apiUrl = "http://localhost:8090/astrology/v1/user/singn-up"
 
 
 function newUser (){
-    fetch("http://localhost:9090/astrology/v1/user/singn-up",
+    fetch(apiUrl,
     {
         headers:{
             'Accept':'application/json',
@@ -20,7 +20,7 @@ function newUser (){
 
         })
     })
-    };
+};
 
 function clean(){
     inputName.value = "";

@@ -6,12 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
+
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
-    Optional<Person> findTopByName(String name);
-    void deleteByName(String name);
 
     @Query(
             value = """

@@ -1,10 +1,17 @@
 o que é docker?
+    É uma ferramenta baseada no Linux que compartilha o kernel da maquina local para isolar a execuçao de processos
 o que ele resolve?
+    é uma soluçao para poder rodar multiplos ambientes / programas / etc.
+    em uma máquina sem consumir muito processamento
 qual a vantagem do docker em relação a virtual machine?
-
+    Compartilha o mesmo kernel da maquina local, com isso consome menos processamento
 O que é uma imagem?
+    É equivalente a uma classe, uma receita de bolo que dita como serao feitos os containers (objetos)
 O que é um container?
-
+    Container é a segregação de processos no mesmo kernel, isolando o processo o máximo possivel do resto do ambiente
 O que é docker-compose?
-
+    É uma ferramenta para gerenciar aolicaçoes docker com multiplos containers
 Como rodar meu app sem o docker?
+    1 - Instalar localmente o postgreSql e configurar o novo banco conforme descrito no proprietis do springboot
+    2 - Buildar o target/astrology.jar com auxilio do maven 
+    3 - Rodar o target/astrology.jar com auxilio do Java 

@@ -26,11 +26,9 @@ public class Person implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
-  //  @NotEmpty(message = "The birth date field is required")
     @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
-  //  @NotEmpty(message = "The birth hour field is required")
     @Column(nullable = false, length = 2)
     private int birthHour;
 
