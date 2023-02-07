@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -210,13 +207,13 @@ public class PersonService {
     private UserDTO getUserDTOFromToken(HttpServletRequest request) throws UserNotFoundException {
         String token = tokenService.getTokenFromRequest(request);
         String email =  tokenService.getEmailLogado(token);
-        User userSaved = userService.verifyIfUserExists(email);
+        User userSaved = userService.getUserFromRepository(email);
         return userMapper.toDTO(userSaved);
     }
 
     private UserDTO getUserDTOFromToken(String bearer) throws UserNotFoundException {
         String email =  tokenService.getEmailLogado(bearer);
-        User userSaved = userService.verifyIfUserExists(email);
+        User userSaved = userService.getUserFromRepository(email);
         return userMapper.toDTO(userSaved);
     }
 

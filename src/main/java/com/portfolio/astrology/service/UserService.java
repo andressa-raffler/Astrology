@@ -11,6 +11,7 @@ import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +38,7 @@ public class UserService {
         public MessageResponseDTO saveUser(UserDTO userDTO){
                 userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
                 userRepository.saveAndFlush(userMapper.toModel(userDTO));
-                return createMessageRespose("User with id " + userDTO.getId() + " was created!");
+                return createMessageRespose("User with id " + userDTO.getId() + " was created/updated!");
         }
 
         private String generatePasswordEncoder(String password){
@@ -44,25 +46,22 @@ public class UserService {
         }
 
         public MessageResponseDTO updateUserById(Long id, UserDTO updatedDTOUser) throws UserNotFoundException {
-                verifyIfUserExists(id);
-                String encoder = this.passwordEncoder.encode(updatedDTOUser.getPassword());
-                updatedDTOUser.setPassword(encoder);
-                User userToUpdate = userMapper.toModel(updatedDTOUser);
-                User updatedUser = userRepository.saveAndFlush(userToUpdate);
+                getUserFromRepository(id);
+                saveUser(updatedDTOUser);
                 return createMessageRespose("User with id " + id + " was updated!");
         }
 
-        public UserDTO findById(Long id, HttpServletRequest request) throws UserNotFoundException {
-                User userSaved = verifyIfUserExists(id);
+        public UserDTO findById(Long id) throws UserNotFoundException {
+                User userSaved = getUserFromRepository(id);
                 return userMapper.toDTO(userSaved);
         }
 
         public MessageResponseDTO deleteUserById(Long id) throws UserNotFoundException {
-                User userSaved = verifyIfUserExists(id);
+                User userSaved = getUserFromRepository(id);
                 userRepository.delete(userSaved);
                 return MessageResponseDTO
                         .builder()
-                        .message("User with id was deleted!")
+                        .message("User with id: "+id+" was deleted!")
                         .build();
         }
 
@@ -80,11 +79,15 @@ public class UserService {
                         .message(message)
                         .build();
         }
-        public User verifyIfUserExists(Long id) throws UserNotFoundException {
-                return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
+        public User getUserFromRepository(Long id) throws UserNotFoundException {
+                Optional<User> userOptional = userRepository.findById(id);
+                if(userOptional.isPresent()) {
+                        return userOptional.get();
+                }
+                else throw  new UserNotFoundException(id);
         }
 
-        public User verifyIfUserExists(String email) throws UserNotFoundException {
+        public User getUserFromRepository(String email) throws UserNotFoundException {
                 return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
         }
 
@@ -93,7 +96,7 @@ public class UserService {
         }
 
         public ResponseEntity<Token> generateToken(String email, String password) throws UserNotFoundException {
-                User user = verifyIfUserExists(userRepository.findByEmail(email).get().getId());
+                User user = getUserFromRepository(userRepository.findByEmail(email).get().getId());
                 if (validPassword(user, password)){
                         Token token = new Token(tokenService.createToken(user));
                         return ResponseEntity.ok(token);

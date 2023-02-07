@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO findUserById(@PathVariable("id") Long id, HttpServletRequest request) throws UserNotFoundException {
-        return userService.findById(id, request);
+        return userService.findById(id);
     }
 
     @GetMapping
