@@ -1,8 +1,7 @@
 const form = document.querySelector("form");
 const inputLoginEmail = document.querySelector(".email");
 const inputLoginPassword = document.querySelector(".password");
-
-const API_URL = "http://localhost:9090/astrology/v1/user/login";
+const API_URL = "http://localhost:8090/astrology/v1/user/login";
 
 async function login(){
   const response = await fetch(API_URL,
@@ -32,7 +31,7 @@ form.addEventListener('submit', function (event){
     login().then((data) => { //.THEN -> Tudo o que está dentro se torna sincrono
         window.localStorage.setItem('token', data.token);
         clean();
-        window.location.pathname = "/menu.html"   
+        window.location.pathname = "/people_list.html"   
     });    
 });
 

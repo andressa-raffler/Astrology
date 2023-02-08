@@ -32,6 +32,6 @@ public class UserDTO {
     private String password;
 
     @Valid
-    private List<PersonDTO> users;
+    private List<PersonDTO> people;
 
 }

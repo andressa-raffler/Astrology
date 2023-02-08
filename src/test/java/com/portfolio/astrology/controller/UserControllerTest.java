@@ -1,13 +1,17 @@
-package com.portfolio.astrology;
+package com.portfolio.astrology.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AstrologyApplicationTests {
+public class UserControllerTest {
 
     @Test
-    void contextLoads() {
+    void saveNewUser(){
+
+
     }
+
+
 
 }
