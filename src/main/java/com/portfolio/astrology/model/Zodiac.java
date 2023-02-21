@@ -42,15 +42,15 @@ public enum Zodiac {
         return maxLongitude;
     }
 
-    public String getZodiacByLongitude(long longitude){
-        Zodiac[] zodiacList = Zodiac.values();
-        for (Zodiac zodiac: zodiacList) {
-            if (zodiac.getMinLongitude() <= longitude && longitude < zodiac.getMaxLongitude()){
-                return zodiac.getDescription();
-            }
-        }
-        return null;
-    }
+//    public String getZodiacByLongitude(long longitude){
+//        Zodiac[] zodiacList = Zodiac.values();
+//        for (Zodiac zodiac: zodiacList) {
+//            if (zodiac.getMinLongitude() <= longitude && longitude < zodiac.getMaxLongitude()){
+//                return zodiac.getDescription();
+//            }
+//        }
+//        return null;
+//    }
 
 
 }
