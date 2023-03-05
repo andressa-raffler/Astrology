@@ -105,13 +105,6 @@ public class UserService {
                 }
         }
 
-//        public ResponseEntity<String> getUserLogged(){
-//                Authentication userLogged = SecurityContextHolder.getContext().getAuthentication();
-//                if(!(userLogged instanceof AnonymousAuthenticationToken)){
-//                        return ResponseEntity.ok(userLogged.getName());
-//                }
-//                return ResponseEntity.status(404).build();
-//        }
 
 
 
