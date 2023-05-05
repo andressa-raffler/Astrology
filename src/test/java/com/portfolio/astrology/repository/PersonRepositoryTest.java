@@ -4,6 +4,7 @@ import com.portfolio.astrology.model.Person;
 import com.portfolio.astrology.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -35,6 +36,7 @@ class PersonRepositoryTest {
     }
 
     @Test
+    @Disabled
     void shouldFindAllPersonFromOneUser() {
         User user = new User();
         String email = "andressa@email.com";

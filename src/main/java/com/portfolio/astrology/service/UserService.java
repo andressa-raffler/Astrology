@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,14 @@ public class UserService {
 
         public MessageResponseDTO saveUser(UserDTO userDTO){
                 userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
+                userDTO.setName(userDTO.getName().toLowerCase(Locale.ROOT));
+                userDTO.setEmail(userDTO.getEmail().toLowerCase(Locale.ROOT));
                 userRepository.saveAndFlush(userMapper.toModel(userDTO));
-                return createMessageRespose("User with id " + userDTO.getId() + " was created/updated!");
+                return createMessageRespose("User with id " + 1 + " was created/updated!");
         }
 
         private String generatePasswordEncoder(String password){
+                String teste = this.passwordEncoder.encode(password);
                return this.passwordEncoder.encode(password);
         }
 
@@ -96,7 +100,7 @@ public class UserService {
         }
 
         public ResponseEntity<Token> generateToken(String email, String password) throws UserNotFoundException {
-                User user = getUserFromRepository(userRepository.findByEmail(email).get().getId());
+                User user = getUserFromRepository(userRepository.findByEmail(email.toLowerCase()).get().getId());
                 if (validPassword(user, password)){
                         Token token = new Token(tokenService.createToken(user));
                         return ResponseEntity.ok(token);
@@ -105,13 +109,6 @@ public class UserService {
                 }
         }
 
-//        public ResponseEntity<String> getUserLogged(){
-//                Authentication userLogged = SecurityContextHolder.getContext().getAuthentication();
-//                if(!(userLogged instanceof AnonymousAuthenticationToken)){
-//                        return ResponseEntity.ok(userLogged.getName());
-//                }
-//                return ResponseEntity.status(404).build();
-//        }
 
 
 

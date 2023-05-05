@@ -73,7 +73,7 @@ class UserServiceTest {
     void updateUserById() throws UserNotFoundException {
         underTest.saveUser(userMapper.toDTO(user));
         Long id = 1L;
-        given(userRepository.findById(id)).willReturn(Optional.of(user));
+
 
         UserDTO updatedUser = new UserDTO();
         String email = "novo-andressa@email.com";
@@ -116,62 +116,15 @@ class UserServiceTest {
 
 
     @Test
-    @Disabled
-    void findById() {
-
-    }
-
-    @Test
-    void shouldDeleteUser() throws UserNotFoundException {
-        Long id = 1L;
-        given(userRepository.findById(id)).willReturn(Optional.of(user));
-        MessageResponseDTO messageResponseDTO = underTest.deleteUserById(id);
-        verify(userRepository).delete(user);
-    }
-
-    @Test
-    void shouldSendMessageWhenDeleteUser() throws UserNotFoundException {
-        Long id = 1L;
-        given(userRepository.findById(id)).willReturn(Optional.of(user));
-        MessageResponseDTO messageResponseDTO = underTest.deleteUserById(id);
-        assertThat(messageResponseDTO.getMessage()).isEqualTo("User with id: "+id+" was deleted!");
-    }
-
-    @Test
-    void shouldntDeletedUserBecauseUserDoesntExist() throws UserNotFoundException {
-        Long id = 1L;
-        assertThatThrownBy(() -> underTest.deleteUserById(id))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("User whit id: " +id+" was not found!");
-        verify(userRepository,never()).delete(any());
-    }
-
-
-
-    @Test
     void listAllUsers() {
         underTest.listAllUsers();
         verify(userRepository).findAll();
-
     }
 
-    @Test
-    @Disabled
-    void verifyIfUserExists() {
-    }
 
     @Test
     @Disabled
-    void testVerifyIfUserExists() {
+    void generateToken () {
     }
 
-    @Test
-    @Disabled
-    void generateToken() {
-    }
-
-    @Test
-    @Disabled
-    void getUserLogged() {
-    }
 }

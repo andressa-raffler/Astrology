@@ -52,8 +52,6 @@ public class PersonService {
         return createMessageResponse("Person with id " + savedPerson.getId() + " was created!");
     }
 
-
-
     public MessageResponseDTO updatePersonById(Long personId, PersonDTO updatedDTOPerson, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         Person savedPerson = getPersonFromUser(personId, request);
         Person updatedPerson = personMapper.toModel(updatedDTOPerson);
@@ -100,11 +98,6 @@ public class PersonService {
         return allChartsByUser;
     }
 
-
-
-
-
-
     public List<Object> getZodiacChart(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         Person personSaved = getPersonFromUser(personName, request);
         Zodiac[] zodiacList = Zodiac.values();
@@ -132,39 +125,13 @@ public class PersonService {
     }
 
 
-
-
-    public List<String> getZodiacChart2(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
-        Person personSaved = getPersonFromUser(personName, request);
-        Zodiac[] zodiacList = Zodiac.values();
-        List<Planet> planets;
-        List<House> houses;
-        List<String> zodiacChart = new ArrayList<>();
-        zodiacChart.add("Zodiac Chart from: "+ personSaved.getName());
-        planets = personSaved.getAstrology().getPlanets();
-        for (Planet planet : planets) {
-            for (Zodiac zodiac : zodiacList) {
-                if (planet.getLongitude() >= zodiac.getMinLongitude() && planet.getLongitude() < zodiac.getMaxLongitude()) {
-                    zodiacChart.add(planet.getName() + ": " + zodiac.getDescription());
-                }
-            }
-        }
-        houses = personSaved.getAstrology().getHouses();
-        for (House house : houses) {
-            for (Zodiac zodiac : zodiacList) {
-                if (house.getLongitude() >= zodiac.getMinLongitude() && house.getLongitude() < zodiac.getMaxLongitude()) {
-                    zodiacChart.add(house.getName() + ": " + zodiac.getDescription());
-                }
-            }
-        }
-
-        return zodiacChart;
-    }
-
-
     private Astrology getAstrologyApiPath(Person personToSave) {
-        return astrologyService.getChartByDate(personToSave.getBirthYear(personToSave.getBirthDate()), personToSave.getBirthMonth(personToSave.getBirthDate()), personToSave.getBirthDay(personToSave.getBirthDate()), personToSave.getBirthHour(), personToSave.getBirthMinute(),
-                personToSave.getCity() + " " + personToSave.getState(), 15);
+        return astrologyService.getChartByDate(personToSave.getBirthYear(personToSave.getBirthDate()),
+                                               personToSave.getBirthMonth(personToSave.getBirthDate()),
+                                               personToSave.getBirthDay(personToSave.getBirthDate()),
+                                               personToSave.getBirthHour(), personToSave.getBirthMinute(),
+                                   personToSave.getCity() + " " + personToSave.getState(),
+                                        15);
     }
     private MessageResponseDTO createMessageResponse(String message){
         return MessageResponseDTO
@@ -204,7 +171,7 @@ public class PersonService {
     }
 
 
-    private UserDTO getUserDTOFromToken(HttpServletRequest request) throws UserNotFoundException {
+    public UserDTO getUserDTOFromToken(HttpServletRequest request) throws UserNotFoundException {
         String token = tokenService.getTokenFromRequest(request);
         String email =  tokenService.getEmailLogado(token);
         User userSaved = userService.getUserFromRepository(email);
