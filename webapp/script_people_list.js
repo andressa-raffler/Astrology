@@ -8,7 +8,7 @@ const inputBirthHour = document.querySelector(".birthHour");
 const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
 const inputSate = document.querySelector(".state");
-const apiUrl = "http://localhost:8090/astrology/v1/user/person"
+const apiUrl = "http://localhost:9090/astrology/v1/user/person"
 
 window.onload = async function loadPeopleList() {
   await fetch(apiUrl, {
@@ -191,3 +191,4 @@ function openChart(name){
   window.localStorage.setItem('chart_person_name', name);
   window.location.pathname = "/chart.html"
 }
+

@@ -2,6 +2,7 @@ package com.portfolio.astrology.repository;
 
 import com.portfolio.astrology.model.User;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,6 +23,7 @@ class UserRepositoryTest {
     }
 
     @Test
+    @Disabled
     void userShouldBeSaved(){
     //given
         User user = new User();

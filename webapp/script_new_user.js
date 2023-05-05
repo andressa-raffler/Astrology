@@ -2,10 +2,11 @@ const form = document.querySelector("form");
 const inputName = document.querySelector(".name");
 const inputEmail = document.querySelector(".email");
 const inputPassword = document.querySelector(".password");
-const apiUrl = "http://localhost:8090/astrology/v1/user/singn-up"
+const apiUrl = "http://localhost:9090/astrology/v1/user/singn-up"
 
 
 function newUser (){
+    console.log("entrou")
     fetch(apiUrl,
     {
         headers:{
@@ -31,8 +32,8 @@ function clean(){
 form.addEventListener('submit', function (event){
     event.preventDefault();
     newUser();
-    clean();
-    window.location.pathname = "/login.html" 
+    //clean();
+    //window.location.pathname = "/login.html" 
 });
 
 

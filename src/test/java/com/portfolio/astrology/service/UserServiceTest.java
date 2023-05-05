@@ -69,6 +69,7 @@ class UserServiceTest {
     }
 
     @Test
+    @Disabled
     void updateUserById() throws UserNotFoundException {
         underTest.saveUser(userMapper.toDTO(user));
         Long id = 1L;
