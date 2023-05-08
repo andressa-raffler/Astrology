@@ -14,14 +14,14 @@ services:
       - db:/var/lib/postgresql/data
 
   Astrology:
-    image: andressa-raffler/astrology:latest
+    image: araffler/astrology:latest
     build:
       context: .
     container_name: Astrology
     depends_on:
       - db
     ports:
-      - '8090:9090'  
+      - '9090:9090'
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -29,7 +29,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
   AstrologyFront:
-    image: andressa-raffler/astrology-front:latest
+    image: araffler/astrology-front:latest
     build:
       context: .
       dockerfile: Dockerfile.webapp

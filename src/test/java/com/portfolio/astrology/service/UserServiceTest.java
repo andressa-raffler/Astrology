@@ -46,13 +46,13 @@ class UserServiceTest {
     void setUp() {
         underTest = new UserService(userRepository, passwordEncoder, tokenService);
         user = new User();
+        user.setId(1L);
         user.setEmail("andressa@email.com");
         user.setName("andressa");
         user.setPassword("senha");
     }
 
     @Test
-
     public void shouldSaveUserTest() {
 
         underTest.saveUser(userMapper.toDTO(user));
@@ -66,10 +66,10 @@ class UserServiceTest {
         assertThat(user.getId()).isEqualTo(capturedUser.getId());
         assertThat(user.getPeople()).isEqualTo(capturedUser.getPeople());
         assertThat(user.getPassword()).isNotEqualTo(capturedUser.getPassword());
+
     }
 
     @Test
-    @Disabled
     void updateUserById() throws UserNotFoundException {
         underTest.saveUser(userMapper.toDTO(user));
         Long id = 1L;

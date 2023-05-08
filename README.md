@@ -39,7 +39,7 @@ http://localhost:8081/
 Agora navegue para dentro da pasta target e execute o java para inicializar o backend:
 ```
 cd target
-java -jar Astrology-0.0.1-SNAPSHOT.jar
+java -jar astrology.jar
 ```
 
 Ao acessar o localhost a seguinte página deverá ser exibida:

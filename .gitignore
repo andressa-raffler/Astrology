@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/resumao.txt
+!**/ToDos.md
 
 ### STS ###
 .apt_generated

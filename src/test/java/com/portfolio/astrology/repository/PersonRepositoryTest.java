@@ -36,7 +36,6 @@ class PersonRepositoryTest {
     }
 
     @Test
-    @Disabled
     void shouldFindAllPersonFromOneUser() {
         User user = new User();
         String email = "andressa@email.com";
