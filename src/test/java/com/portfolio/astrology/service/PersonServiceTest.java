@@ -59,10 +59,12 @@ class PersonServiceTest {
     void setUp() {
         underTest = new PersonService(personRepository, astrologyService, userService, tokenService );
         user = new User();
+        user.setId(1L);
         user.setEmail("andressa@email.com");
         user.setName("andressa");
         user.setPassword("senha");
         person = new Person();
+        person.setId(100L);
         person.setUser(user);
         person.setUsers(user);
         person.setName("Andressa");
@@ -76,20 +78,20 @@ class PersonServiceTest {
     @Test
     @Disabled
     void shouldSavePersonTest() throws UserNotFoundException {
-//
-//        given(underTest.getUserDTOFromToken(request)).willReturn(userMapper.toDTO(user));
-//        underTest.savePerson(personMapper.toDTO(person),request);
-//        ArgumentCaptor<Person> personArgumentCaptor = ArgumentCaptor.forClass(Person.class);
-//        verify(personRepository).saveAndFlush(personArgumentCaptor.capture());
-//        Person capturedPerson = personArgumentCaptor.getValue();
-//
-//        assertThat(person.getName()).isEqualTo(capturedPerson.getName());
-//        assertThat(person.getUsers()).isEqualTo(capturedPerson.getUsers());
-//        assertThat(person.getCity()).isEqualTo(capturedPerson.getCity());
-//        assertThat(person.getState()).isEqualTo(capturedPerson.getState());
-//        assertThat(person.getBirthDate()).isEqualTo(capturedPerson.getBirthDate());
-//        assertThat(person.getBirthHour()).isEqualTo(capturedPerson.getBirthHour());
-//        assertThat(person.getBirthMinute()).isEqualTo(capturedPerson.getBirthMinute());
+
+        given(underTest.getUserDTOFromToken(request)).willReturn(userMapper.toDTO(user));
+        underTest.savePerson(personMapper.toDTO(person),request);
+        ArgumentCaptor<Person> personArgumentCaptor = ArgumentCaptor.forClass(Person.class);
+        verify(personRepository).saveAndFlush(personArgumentCaptor.capture());
+        Person capturedPerson = personArgumentCaptor.getValue();
+
+        assertThat(person.getName()).isEqualTo(capturedPerson.getName());
+        assertThat(person.getUsers()).isEqualTo(capturedPerson.getUsers());
+        assertThat(person.getCity()).isEqualTo(capturedPerson.getCity());
+        assertThat(person.getState()).isEqualTo(capturedPerson.getState());
+        assertThat(person.getBirthDate()).isEqualTo(capturedPerson.getBirthDate());
+        assertThat(person.getBirthHour()).isEqualTo(capturedPerson.getBirthHour());
+        assertThat(person.getBirthMinute()).isEqualTo(capturedPerson.getBirthMinute());
     }
 
 
