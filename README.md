@@ -1,53 +1,60 @@
 # **Birth Chart API Calculator**
 
-## PRÉ REQUISITOS
-Para inicializar o projeto será necessária a instalaçao das seguintes ferramentas na sua máquina:
- - Docker
- - Java 17
- - Maven 4.0
+## REQUIREMENTS
+Before starting the project, make sure you have the following tools installed on your computer:
 
-## START NA APLICAÇAO
-Primeiro, clone o meu repositório
+- Docker
+- Java 17
+- Maven 4.0
+
+These tools are essential for initializing and running the application. If any of these requirements are not met, 
+the project may not run correctly.
+
+To ensure the smooth execution of the project, we recommend verifying the version of each tool before proceeding with 
+the installation. This will help to prevent any potential compatibility issues and ensure that the application runs smoothly.
+
+## STARTING THE APPLICATION
+To get started, first clone the repository:
+
 ```
 git clone https://github.com/andressa-raffler/Astrology.git
 ```
 
-Após clonar o repositório será necessário buildar localmente o projeto, para isso Após clonar o projeto, navegue até a 
-pasta astrology (pasta que contem o arquivo docker-compose.yml) e rode o comando:
-
+After cloning the repository, you will need to build the project locally. Navigate to the astrology folder 
+(the folder containing the docker-compose.yml file) and run the following command:
 ```
 mvn clean install
 ```
 
-Após completar o build, a pasta target será criada.
-Com o docker rodando, suba os containers do projeto com o comando: 
+Once the build is complete, the target folder will be created. With Docker running, start the project containers using 
+the command:
 ```
 docker-compose up -d
 ```
-O comando deverá rodar uma instancia do postgres com os seguintes dados de acesso:
+This command will run a Postgres instance with the following access data:
 ```
 URL: jdbc:postgresql://db:5432/postgres
 Username: postgres
 Password: postgres
 ```
-Os dados acima podem ser alterados conforme preferencia, para isso, basta alterar o arquivo docker-compose.yml
+The above data can be changed according to your preference. To do so, simply modify the docker-compose.yml file.
 
-O docker também irá rodar uma imagem do NGINX para o frontend que ficará disponível na seguinte URL:
+Docker will also run an NGINX image for the frontend, which will be available at the following URL:
 ```
 http://localhost:8081/
 ```
-Agora navegue para dentro da pasta target e execute o java para inicializar o backend:
+Now, navigate to the target folder and run the Java command to start the backend:
 ```
 cd target
 java -jar astrology.jar
 ```
 
-Ao acessar o localhost a seguinte página deverá ser exibida:
+When you access localhost, the following page should be displayed:
 
 ![img.png](images/img.png)
 
-Crie entao um novo usuário para posteriormente poder logar na aplicaçao
-Após logar será possível criar, visualizar, editar e deletar mapas astrais
+You can then create a new user to be able to log in to the application later. Once logged in, it will be possible to 
+create, view, edit, and delete birth charts.
 
 ![img_1.png](images/img_1.png)
 
@@ -55,17 +62,26 @@ Após logar será possível criar, visualizar, editar e deletar mapas astrais
 
 
 
-# Projeto desenvolvido com as seguintes tecnologias:
+# TECHNOLOGIES
 
 ## Backend:
-  - Java;
+  - Java 17;
   - SpringBoot;
-  - Postgres SQL;
   - Docker;
   - REST API;
   - MapStruct;
+  - Mockito;
+  - JUnit;
+  - Hibernate;
+  - JsonWebToken;
+  - Spring Security;
+  - Lombok.
 
 ## Frontend:
   - JavaScript;
   - HTML;
   - CSS;
+
+## BD:
+  - Tests: H2
+  - Repository: Postgres
