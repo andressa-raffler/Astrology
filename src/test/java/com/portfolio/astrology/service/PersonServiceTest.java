@@ -8,7 +8,6 @@ import com.portfolio.astrology.model.User;
 import com.portfolio.astrology.repository.PersonRepository;
 import com.portfolio.astrology.security.TestConfig;
 import com.portfolio.astrology.security.TokenService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import com.portfolio.astrology.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.Optional;
+
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
