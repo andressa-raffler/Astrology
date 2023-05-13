@@ -16,7 +16,8 @@ import java.util.List;
 @Table(name = "astrology")
 public class Astrology implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "astrology_seq")
+    @SequenceGenerator(name = "astrology_seq", sequenceName = "astrology_seq", allocationSize = 1)
     private Long id;
 
 

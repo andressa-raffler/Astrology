@@ -22,7 +22,8 @@ import java.util.Objects;
 public class User implements Serializable {
 
     @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "The name field is required")

@@ -15,3 +15,6 @@ Como rodar meu app sem o docker?
     1 - Instalar localmente o postgreSql e configurar o novo banco conforme descrito no proprietis do springboot
     2 - Buildar o target/astrology.jar com auxilio do maven 
     3 - Rodar o target/astrology.jar com auxilio do Java 
+
+
+

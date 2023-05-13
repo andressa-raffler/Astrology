@@ -20,6 +20,8 @@ public class Person implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "person_seq", sequenceName = "person_seq", allocationSize = 1)
+
     private Long id;
 
     @NotBlank(message = "The name field is required")
