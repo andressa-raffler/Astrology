@@ -13,7 +13,8 @@ import java.io.Serializable;
 @Table(name = "planet")
 public class Planet implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "planet_seq")
+    @SequenceGenerator(name = "planet_seq", sequenceName = "planet_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, length = 100)

@@ -1,5 +1,6 @@
 package com.portfolio.astrology.service;
 
+import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.mapper.PersonMapper;
 import com.portfolio.astrology.mapper.UserMapper;
@@ -77,8 +78,11 @@ class PersonServiceTest {
     @Test
     @Disabled
     void shouldSavePersonTest() throws UserNotFoundException {
-
-        given(underTest.getUserDTOFromToken(request)).willReturn(userMapper.toDTO(user));
+        UserDTO userDTO = userMapper.toDTO(user);
+        given(tokenService.getTokenFromRequest(request)).willReturn("Token");
+        given(tokenService.getEmailLogado("Token")).willReturn("andressa@email.com");
+        given(userService.getUserFromRepository("andressa@email.com")).willReturn(user);
+        given(underTest.getUserDTOFromToken(request)).willReturn(userDTO);
         underTest.savePerson(personMapper.toDTO(person),request);
         ArgumentCaptor<Person> personArgumentCaptor = ArgumentCaptor.forClass(Person.class);
         verify(personRepository).saveAndFlush(personArgumentCaptor.capture());

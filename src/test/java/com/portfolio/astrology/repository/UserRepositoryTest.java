@@ -1,7 +1,9 @@
 package com.portfolio.astrology.repository;
 
+import com.portfolio.astrology.StartIdSequenceBDTests;
 import com.portfolio.astrology.model.User;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,6 +17,11 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository underTest;
+
+    @BeforeAll
+    static void beforeAll() {
+        StartIdSequenceBDTests.startIdSequence();
+    }
 
     @AfterEach
     void tearDown() {

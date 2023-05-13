@@ -1,10 +1,10 @@
 package com.portfolio.astrology.repository;
 
+import com.portfolio.astrology.StartIdSequenceBDTests;
 import com.portfolio.astrology.model.Person;
 import com.portfolio.astrology.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,7 +26,7 @@ class PersonRepositoryTest {
 
     @BeforeEach
     void setUp(){
-
+        StartIdSequenceBDTests.startIdSequence();
     }
 
     @AfterEach

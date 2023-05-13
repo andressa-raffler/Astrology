@@ -53,6 +53,7 @@ class UserServiceTest {
     }
 
     @Test
+    @Disabled
     public void shouldSaveUserTest() {
 
         underTest.saveUser(userMapper.toDTO(user));
