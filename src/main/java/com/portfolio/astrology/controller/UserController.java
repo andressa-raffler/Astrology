@@ -73,6 +73,12 @@ public class UserController {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-            return errors;
-        }
+        return errors;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException (UserNotFoundException ex) {
+        return ResponseEntity.notFound().build();
+    }
+}

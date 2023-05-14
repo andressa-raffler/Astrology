@@ -11,6 +11,7 @@ import com.portfolio.astrology.repository.UserRepository;
 import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.security.TokenService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class UserService {
 
 
@@ -99,9 +102,12 @@ public class UserService {
         }
 
         public ResponseEntity<Token> generateToken(String email, String password) throws UserNotFoundException {
-                User user = getUserFromRepository(userRepository.findByEmail(email.toLowerCase()).get().getId());
+                Optional<User> userOptional = userRepository.findByEmail(email.toLowerCase());
+                User user = userOptional.orElseThrow(() -> new UserNotFoundException(email));
                 if (validPassword(user, password)){
+                        log.debug("valid Password");
                         Token token = new Token(tokenService.createToken(user));
+                        log.debug("sending token");
                         return ResponseEntity.ok(token);
                 }else{
                         return ResponseEntity.status(403).build();
