@@ -165,6 +165,7 @@ function editPerson(){
 
 
 async function editChart(person_id){
+  try {
   const response = await fetch( apiUrl+"/"+person_id,
   {
       method: "PUT",
@@ -185,7 +186,12 @@ async function editChart(person_id){
   })
 
 return response.json();
-};
+} .catch(function (error) {
+  console.log(error);
+  error.json().then(data => {
+    alert(data.message);
+  });
+});
 
 function openChart(name){
   window.localStorage.setItem('chart_person_name', name);

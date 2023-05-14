@@ -42,15 +42,6 @@ public class PersonService {
     }
 
 
-    public MessageResponseDTO savePerson(String bearer, PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
-        Person personToSave = personMapper.toModel(personDTO);
-        personToSave.setAstrology(getAstrologyApiPath(personToSave));
-        User user = userMapper.toModel(getUserDTOFromToken(bearer));
-        user.addToUsers(personToSave);
-        personToSave.setUser(user);
-        Person savedPerson = personRepository.saveAndFlush(personToSave);
-        return createMessageResponse("Person with id " + savedPerson.getId() + " was created!");
-    }
 
     public MessageResponseDTO updatePersonById(Long personId, PersonDTO updatedDTOPerson, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         Person savedPerson = getPersonFromUser(personId, request);

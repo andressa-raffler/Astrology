@@ -36,7 +36,11 @@ window.onload = async function loadChart() {
         console.log(ul);
       });
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch(error => {
+      console.error(error);
+      alert("Error creating new user");
+      const messageElement = document.getElementById('message');
+      messageElement.innerHTML = message;
+      responseMessage.textContent = 'Error creating new user';
     });
 };

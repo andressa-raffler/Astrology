@@ -74,19 +74,17 @@ class UserServiceTest {
     void updateUserById() throws UserNotFoundException {
         underTest.saveUser(userMapper.toDTO(user));
         Long id = 1L;
-
-
         UserDTO updatedUser = new UserDTO();
         String email = "novo-andressa@email.com";
         String name = "novo-andressa";
         String password = "novo-senha";
-
+        updatedUser.setId(1L);
         updatedUser.setEmail(email);
         updatedUser.setName(name);
         updatedUser.setPassword(password);
         updatedUser.setPeople(Collections.emptyList());
+        given(userRepository.findById(id)).willReturn(Optional.of(user));
         underTest.updateUserById(1L, updatedUser);
-
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository,times(2)).saveAndFlush(userArgumentCaptor.capture());
         User capturedUser = userArgumentCaptor.getValue();
