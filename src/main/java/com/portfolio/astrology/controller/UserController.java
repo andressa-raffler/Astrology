@@ -43,11 +43,12 @@ public class UserController {
 
     @PostMapping("/singn-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewUser(@RequestBody @Valid UserDTO userDTO) {
+    public MessageResponseDTO saveNewUser( @RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public MessageResponseDTO updateUserById(@PathVariable("id") Long id, @Valid @RequestBody UserDTO userDTO) throws UserNotFoundException {
         return userService.updateUserById(id, userDTO);
     }

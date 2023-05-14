@@ -81,9 +81,11 @@ document.getElementById('saveEdit')
 
 function saveNewPerson(){
     calculateNewChart().then((data) => {
-    cleanNewPersonForm();
-    document.getElementById('modal').classList.remove('active')
-    window.location.pathname = "/people_list.html"
+      alert(data.message);
+      if (data.message.includes("created")) {
+        cleanNewPersonForm();
+        document.getElementById('modal').classList.remove('active')
+        window.location.pathname = "/people_list.html"}
   })
 }
 
@@ -154,15 +156,16 @@ function openEditModal(id, name, birthdate, birthHour, birthMinute, city, state)
 function editPerson(){
   person_id = window.localStorage.getItem('edited_person_id');
   editChart(person_id).then((data) => {
-    window.alert("Person with id: "+person_id+" was edited");
-    document.getElementById('modalFilled').classList.remove('active');
-    window.localStorage.removeItem('edited_person_id');
-    window.location.pathname = "/people_list.html"
-    cleanNewPersonForm;
+    alert(data.message);
+    if (data.message.includes("updated")) {
+      document.getElementById('modalFilled').classList.remove('active');
+      window.localStorage.removeItem('edited_person_id');
+      window.location.pathname = "/people_list.html";
+      cleanNewPersonForm;
+    } 
   })
 
 }
-
 
 async function editChart(person_id){
   const response = await fetch( apiUrl+"/"+person_id,
@@ -181,12 +184,11 @@ async function editChart(person_id){
           birthMinute:  document.getElementById("id_birth_minute").value ,
           city:         document.getElementById("id_city"        ).value ,
           state:        document.getElementById("id_state"       ).value 
-      })
-  })
-
-return response.json();
-};
-
+      }),
+  });
+  const data = await response.json();
+  return data;
+}
 function openChart(name){
   window.localStorage.setItem('chart_person_name', name);
   window.location.pathname = "/chart.html"
