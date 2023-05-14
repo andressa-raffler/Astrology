@@ -21,11 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import javax.validation.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,22 +38,31 @@ public class UserService {
         private TokenService tokenService;
 
         public MessageResponseDTO saveUser(UserDTO userDTO) {
-                try {   userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
-                        userDTO.setName(userDTO.getName().toLowerCase(Locale.ROOT));
-                        userDTO.setEmail(userDTO.getEmail().toLowerCase(Locale.ROOT));
-                        userRepository.saveAndFlush(userMapper.toModel(userDTO));
-                        return createMessageRespose("User with id " + userDTO.getId() + " was created/updated!");
+
+                try {MessageResponseDTO listOfViolationsMessageResponseDTO = inputedUserErrorMessages(userDTO);
+                        if(listOfViolationsMessageResponseDTO == null){
+                                userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
+                                userDTO.setName(userDTO.getName().toLowerCase(Locale.ROOT));
+                                userDTO.setEmail(userDTO.getEmail().toLowerCase(Locale.ROOT));
+                                Long id = saveAndFlushPerson(userMapper.toModel(userDTO));
+                                return createMessageResponse("User with id " + id + " was created/updated!");
+                        }
+                        return listOfViolationsMessageResponseDTO;
                 }catch (DataIntegrityViolationException e) {
-                                String errorMessage = "User already registered";
-                                return createMessageRespose(errorMessage);
-                }catch (ConstraintViolationException e) { //email nao preenchido
-                        String errorMessage = "Error creating new user, verify your e-mail. " ;
-                        return createMessageRespose(errorMessage);}
-                catch(Exception e ){
-                        String errorMessage = "Error creating new user:";
-                        return createMessageRespose(errorMessage);
+                        return createMessageResponse("Email already exists.");
                 }
+                catch(Exception e ){
+                        return createMessageResponse("Error creating new user");
+                }
+
         }
+
+        private Long saveAndFlushPerson(User userToSave) {
+                User savedUser = userRepository.saveAndFlush(userToSave);
+                return savedUser.getId();
+        }
+
+
 
         private String generatePasswordEncoder(String password){
                 String teste = this.passwordEncoder.encode(password);
@@ -66,7 +72,7 @@ public class UserService {
         public MessageResponseDTO updateUserById(Long id, UserDTO updatedDTOUser) throws UserNotFoundException {
                 getUserFromRepository(id);
                 saveUser(updatedDTOUser);
-                return createMessageRespose("User with id " + id + " was updated!");
+                return createMessageResponse("User with id " + id + " was updated!");
         }
 
         public UserDTO findById(Long id) throws UserNotFoundException {
@@ -91,7 +97,7 @@ public class UserService {
                         .collect(Collectors.toList());
         }
 
-        private MessageResponseDTO createMessageRespose(String message){
+        private MessageResponseDTO createMessageResponse(String message){
                 return MessageResponseDTO
                         .builder()
                         .message(message)
@@ -125,6 +131,22 @@ public class UserService {
                         return ResponseEntity.status(403).build();
                 }
         }
+
+        private MessageResponseDTO inputedUserErrorMessages(UserDTO userDTO) {
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                Validator validator = factory.getValidator();
+                Set<ConstraintViolation<User>> violations = validator.validate(userMapper.toModel(userDTO));
+                if (!violations.isEmpty()) {
+                        List<String> errorMessages = new ArrayList<>();
+                        for (ConstraintViolation<User> violation : violations) {
+                                errorMessages.add(violation.getMessage());
+                        }
+                        return createMessageResponse(errorMessages.toString());
+                }
+                return null;
+        }
+
+
 
 }
 

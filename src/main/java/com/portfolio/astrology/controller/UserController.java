@@ -43,7 +43,7 @@ public class UserController {
 
     @PostMapping("/singn-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewUser(@RequestBody @Valid UserDTO userDTO) {
+    public MessageResponseDTO saveNewUser( @RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
     }
 

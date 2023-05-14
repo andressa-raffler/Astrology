@@ -22,22 +22,13 @@ function newUser (){
     })
     .then(response => response.json())
     .then(data => {
-        responseMessage.textContent = data.message;
+        alert(data.message);
         if(data.message.includes("created")){
             const messageElement = document.getElementById('message');
             messageElement.innerHTML = message;
             window.location.href = "/login.html" 
-        }else{
-            alert(data.message);
         }
     })
-    .catch(error => {
-        console.error(error);
-        alert("Error creating new user");
-        const messageElement = document.getElementById('message');
-            messageElement.innerHTML = message;
-        responseMessage.textContent = 'Ocorreu um erro ao criar o novo usuário.';
-    });
 };
 function clean(){
     inputName.value = "";

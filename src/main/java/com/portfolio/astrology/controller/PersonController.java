@@ -54,7 +54,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-     public MessageResponseDTO saveNewPerson(@RequestBody @Valid PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
+     public MessageResponseDTO saveNewPerson(@RequestBody PersonDTO personDTO, HttpServletRequest request) {
         return personService.savePerson(personDTO, request);
     }
 

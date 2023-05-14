@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -28,12 +26,19 @@ public class Person implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @NotNull(message = "The Birth Date field is required")
     @Column(nullable = false, name = "birth_date", columnDefinition = "DATE")
+    @PastOrPresent(message = "The Birth Date must be in the past or present")
     private LocalDate birthDate;
 
+    @NotNull(message = "The Birth hour field is required")
+    @Min(value = 1, message = "The Birth hour must be greater than or equal to 1")
+    @Max(value = 59, message = "The Birth hour must be less than or equal to 24")
     @Column(nullable = false, length = 2)
     private int birthHour;
-
+    @NotNull(message = "The Birth minute field is required")
+    @Min(value = 1, message = "The Birth minute must be greater than or equal to 1")
+    @Max(value = 59, message = "The Birth minute must be less than or equal to 59")
     @Column(nullable = false, length = 2)
     private int birthMinute;
 

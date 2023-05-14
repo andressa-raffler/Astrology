@@ -15,9 +15,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -31,31 +33,66 @@ public class PersonService {
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
-    public MessageResponseDTO savePerson(PersonDTO personDTO, HttpServletRequest request) throws UserNotFoundException {
-        Person personToSave = personMapper.toModel(personDTO);
-        personToSave.setAstrology(getAstrologyApiPath(personToSave));
-        User user = userMapper.toModel(getUserDTOFromToken(request));
-        user.addToUsers(personToSave);
-        personToSave.setUser(user);
+    public MessageResponseDTO savePerson(PersonDTO personDTO, HttpServletRequest request) {
+        try {
+            MessageResponseDTO listOfViolationsMessageResponseDTO = inputedPersonErrorMessages(personDTO);
+            if (listOfViolationsMessageResponseDTO == null) {
+                Person personToSave = personMapper.toModel(personDTO);
+                personToSave.setAstrology(getAstrologyApiPath(personToSave));
+                User user = userMapper.toModel(getUserDTOFromToken(request));
+                user.addToUsers(personToSave);
+                personToSave.setUser(user);
+                Long idSavedPerson = saveAndFlushPerson(personToSave);
+                return createMessageResponse("Person with id " + idSavedPerson + " was created!");
+            }
+            return listOfViolationsMessageResponseDTO;
+        } catch (UserNotFoundException e) {
+            return createMessageResponse("New person can't be saved");
+        }
+    }
+
+    private Long saveAndFlushPerson(Person personToSave) {
         Person savedPerson = personRepository.saveAndFlush(personToSave);
-        return createMessageResponse("Person with id " + savedPerson.getId() + " was created!");
+        return savedPerson.getId();
     }
 
 
+    private MessageResponseDTO inputedPersonErrorMessages(PersonDTO personDTO) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Person>> violations = validator.validate(personMapper.toModel(personDTO));
+        if (!violations.isEmpty()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (ConstraintViolation<Person> violation : violations) {
+                errorMessages.add(violation.getMessage());
+            }
+           return createMessageResponse(errorMessages.toString());
+        }
+        return null;
+    }
 
-    public MessageResponseDTO updatePersonById(Long personId, PersonDTO updatedDTOPerson, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
-        Person savedPerson = getPersonFromUser(personId, request);
-        Person updatedPerson = personMapper.toModel(updatedDTOPerson);
-        savedPerson.setName(updatedPerson.getName());
-        savedPerson.setId(personId);
-        savedPerson.setBirthDate(updatedPerson.getBirthDate());
-        savedPerson.setBirthHour(updatedPerson.getBirthHour());
-        savedPerson.setBirthMinute(updatedPerson.getBirthMinute());
-        savedPerson.setCity(updatedPerson.getCity());
-        savedPerson.setState(updatedPerson.getState());
-        savedPerson.setAstrology(getAstrologyApiPath(updatedPerson));
-        personRepository.saveAndFlush(savedPerson);
-        return createMessageResponse("Person with id " + personId + " was updated!");
+
+    public MessageResponseDTO updatePersonById(Long personId, PersonDTO updatedDTOPerson, HttpServletRequest request) {
+        try {
+            MessageResponseDTO listOfViolationsMessageResponseDTO = inputedPersonErrorMessages(updatedDTOPerson);
+            if(listOfViolationsMessageResponseDTO == null){
+                Person savedPerson = getPersonFromUser(personId, request);
+                Person updatedPerson = personMapper.toModel(updatedDTOPerson);
+                savedPerson.setName(updatedPerson.getName());
+                savedPerson.setId(personId);
+                savedPerson.setBirthDate(updatedPerson.getBirthDate());
+                savedPerson.setBirthHour(updatedPerson.getBirthHour());
+                savedPerson.setBirthMinute(updatedPerson.getBirthMinute());
+                savedPerson.setCity(updatedPerson.getCity());
+                savedPerson.setState(updatedPerson.getState());
+                savedPerson.setAstrology(getAstrologyApiPath(updatedPerson));
+                Long idUpdatedPerson = saveAndFlushPerson(savedPerson);
+                return createMessageResponse("Person with id " + idUpdatedPerson + " was updated!");
+            }
+            return listOfViolationsMessageResponseDTO;
+        }catch (NullPointerException | UserNotFoundException | PersonNotFoundException e){
+            return createMessageResponse("Invalid Data. Please verify your information");
+        }
     }
 
 
