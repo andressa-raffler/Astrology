@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
 
 @RestController
@@ -28,7 +27,6 @@ public class PersonController {
     PersonService personService;
     AstrologyService astrologyService;
     private HttpServletRequest request;
-
 
     @GetMapping
     public List<Person> listAllPeople(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
@@ -68,6 +66,4 @@ public class PersonController {
     public MessageResponseDTO deletePersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.deletePersonById(id, request);
     }
-
-
 }

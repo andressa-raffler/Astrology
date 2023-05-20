@@ -7,10 +7,16 @@ const inputBirthDate = document.querySelector(".birthDate");
 const inputBirthHour = document.querySelector(".birthHour");
 const inputBirthMinute = document.querySelector(".birthMinute");
 const inputCity = document.querySelector(".city");
-const inputSate = document.querySelector(".state");
+const inputSate = document.getElementById("state");
+const stateSelectElement = document.getElementById('state');
 const apiUrl = "http://localhost:9090/astrology/v1/user/person"
 
-window.onload = async function loadPeopleList() {
+window.onload = function(){
+  createStatesDropdown();
+  loadPeopleList();
+}
+
+async function loadPeopleList() {
   await fetch(apiUrl, {
     method: "GET",
     headers: {
@@ -53,9 +59,10 @@ function printPeopleList(val){
 
 const openModal = () => document.getElementById('modal')
     .classList.add('active')
-
-const closeModal = () => document.getElementById('modal')
-    .classList.remove('active')
+    const closeModal = () => {
+      cleanNewPersonForm();
+      document.getElementById('modal').classList.remove('active');
+    };
 
 const openModalFilled = () => document.getElementById('modalFilled')
     .classList.add('active')
@@ -105,7 +112,7 @@ async function calculateNewChart(){
           birthHour: inputBirthHour.value,
           birthMinute: inputBirthMinute.value,
           city: inputCity.value,
-          state: inputSate.value
+          state: stateSelectElement.options[stateSelectElement.selectedIndex].text,
       })
   })
 return response.json();
@@ -141,31 +148,65 @@ async function sendPersonDeleteToBackend(person_id){
   })
 };
 
-function openEditModal(id, name, birthdate, birthHour, birthMinute, city, state){
+async function openEditModal(id, name, birthdate, birthHour, birthMinute, city, state) {
+  createStatesDropdown();
   document.getElementById('modalFilled').classList.add('active');
-  document.getElementById("id_name"        ).value = name
-  document.getElementById("id_birth_date"  ).value = birthdate
-  document.getElementById("id_birth_hour"  ).value = birthHour
-  document.getElementById("id_birth_minute").value = birthMinute
-  document.getElementById("id_city"        ).value = city
-  document.getElementById("id_state"       ).value = state
+  document.getElementById("id_name").value = name;
+  document.getElementById("id_birth_date").value = birthdate;
+  document.getElementById("id_birth_hour").value = birthHour;
+  document.getElementById("id_birth_minute").value = birthMinute;
+  document.getElementById("city").value = city;
+  document.getElementById("state").value = state;
   window.localStorage.setItem('edited_person_id', id);
+
+  // Obter o ID do estado selecionado
+  const stateId = stateSelectElement.value;
+
+  if (stateId) {
+    // Obter a lista de cidades do estado correspondente
+    const cities = await getCities(stateId);
+
+    // Preencher o dropdown de cidades
+    updateCitiesDropdown(cities);
+
+    // Selecionar a cidade correspondente
+    const citySelectElement = document.getElementById('city');
+    citySelectElement.value = city;
+  }
 }
 
 
-function editPerson(){
-  person_id = window.localStorage.getItem('edited_person_id');
-  editChart(person_id).then((data) => {
-    alert(data.message);
-    if (data.message.includes("updated")) {
-      document.getElementById('modalFilled').classList.remove('active');
-      window.localStorage.removeItem('edited_person_id');
-      window.location.pathname = "/people_list.html";
-      cleanNewPersonForm;
-    } 
-  })
 
+async function editPerson() {
+  const personId = window.localStorage.getItem('edited_person_id');
+  const stateId = stateSelectElement.value;
+  const cityName = document.getElementById("city").value;
+
+  // Obter o ID da cidade a partir do nome e do ID do estado
+  const cityId = await getCityIdByName(cityName, stateId);
+
+  if (stateId && cityId) {
+    const requestBody = {
+      name: document.getElementById("id_name").value,
+      birthDate: document.getElementById("id_birth_date").value,
+      birthHour: document.getElementById("id_birth_hour").value,
+      birthMinute: document.getElementById("id_birth_minute").value,
+      city: cityId, // Use o ID da cidade obtido
+      state: stateId, // Use o ID do estado obtido
+    };
+
+    sendEditRequest(personId, requestBody).then((data) => {
+      alert(data.message);
+      if (data.message.includes("updated")) {
+        document.getElementById('modalFilled').classList.remove('active');
+        window.localStorage.removeItem('edited_person_id');
+        window.location.pathname = "/people_list.html";
+        cleanNewPersonForm();
+      }
+    });
+  }
 }
+
 
 async function editChart(person_id){
   const response = await fetch( apiUrl+"/"+person_id,
@@ -182,15 +223,60 @@ async function editChart(person_id){
           birthDate:    document.getElementById("id_birth_date"  ).value ,
           birthHour:    document.getElementById("id_birth_hour"  ).value ,
           birthMinute:  document.getElementById("id_birth_minute").value ,
-          city:         document.getElementById("id_city"        ).value ,
-          state:        document.getElementById("id_state"       ).value 
+          city:         document.getElementById("city"        ).value ,
+          state:        document.getElementById("state"       ).value 
       }),
   });
   const data = await response.json();
   return data;
 }
+
 function openChart(name){
   window.localStorage.setItem('chart_person_name', name);
   window.location.pathname = "/chart.html"
 }
 
+// Function to get one list of states from IBGE API
+async function getStates() {
+  const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+  const data = await response.json();
+  return data;
+}
+
+async function createStatesDropdown() {
+  const states = await getStates();
+  const selectElement = document.getElementById('state');
+  states.forEach(state => {
+    const optionElement = document.createElement('option');
+    optionElement.value = state.id;
+    optionElement.textContent = state.nome;
+    selectElement.appendChild(optionElement);
+  });
+}
+
+// Function to get the cities of a state
+async function getCities(stateId) {
+  const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateId}/municipios`);
+  const data = await response.json();
+  return data;
+}
+
+// Function to update the cities in the dropdown list
+function updateCitiesDropdown(cities) {
+  const selectElement = document.getElementById('city');
+  selectElement.innerHTML = ''; // Clear previous options
+
+  cities.forEach(city => {
+    const optionElement = document.createElement('option');
+    optionElement.value = city.nome; // Set the value to city ID
+    optionElement.textContent = city.nome;
+    selectElement.appendChild(optionElement);
+  });
+}
+
+// Event to update the cities when the state is changed
+stateSelectElement.addEventListener('change', async () => {
+  const stateId = stateSelectElement.value;
+  const cities = await getCities(stateId);
+  updateCitiesDropdown(cities);
+});
