@@ -163,4 +163,39 @@ h3{
     color: var(--green-secundary);
     gap: 0.5em;    
 }
-
+.container__box {
+    text-align: center;
+    margin: 1em auto 2em auto;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .content {
+    font-size: 15px;
+    font-weight: 100;
+    color: var(--green-primary);
+    margin: 2em 0;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .content table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .content th,
+  .content td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid var(--softy-gray);
+  }
+  
+  .container__title,
+  .secundary__title {
+    margin: 20px 0;
+  }
+  

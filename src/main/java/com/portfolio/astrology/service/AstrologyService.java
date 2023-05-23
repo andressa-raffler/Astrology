@@ -1,34 +1,45 @@
 package com.portfolio.astrology.service;
 
 
+import com.google.gson.Gson;
+import com.portfolio.astrology.dto.request.PersonDTO;
+import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.PersonRepository;
-import com.portfolio.astrology.response.AstrologyResponse;
-import com.portfolio.astrology.response.PlanetsResponse;
+import com.portfolio.astrology.response.astrology.AstrologyResponse;
+import com.portfolio.astrology.response.gpt.GptResponse;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.env.Environment;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Getter
 @Setter
 @Service
-//@Slf4j
+
 public class AstrologyService {
 
 
     @Autowired
     PersonRepository personRepository;
 
-    @Value("${apiKey}")
-    private String apiKey;
+    @Value("${astrologicApiKey}")
+    private String astrologicApiKey;
+    @Autowired
+    private Environment environment;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private
+    String gptApiKey = environment.getProperty("GPT_API_KEY");
 
     public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute,
                                     String queryLocation, int houses) {
@@ -37,19 +48,19 @@ public class AstrologyService {
         return getAstrologyFromAstrologyResponse(Objects.requireNonNull(response.getBody()));
     }
 
+
     private ResponseEntity<AstrologyResponse> apiAstrologicoCall(int birthYear, int birthMonth, int birthDay,
                                                                  int birthHour, int birthMinute, String queryLocation,
                                                                  int houses){
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForEntity("https://api.astrologico.org/v1/chart?localdate=" + birthDay + "|"
                         + birthMonth + "|" + birthYear + "|" + birthHour + "|" + birthMinute + "&querylocation="
-                        + queryLocation + "&houses=" + houses + "&key="+apiKey, AstrologyResponse.class);
-    }
+                        + queryLocation + "&houses=" + houses + "&key="+ astrologicApiKey, AstrologyResponse.class);
 
+    }
 
     private Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
         Astrology astrology = new Astrology();
-        //      astrology.setStatus(astrologyResponse.getStatusResponse());
 
         Planet p0 = new Planet();
         p0.setName(astrologyResponse.getPlanets().getP0().getName());
@@ -242,5 +253,75 @@ public class AstrologyService {
         }
         return "";
     }
+
+    protected String getTableChartFromPerson(PersonDTO personDTO){
+        List<Map<String, Object>> planetList = new ArrayList<>();
+        List<Planet> planets;
+        List<House> houses;
+        planets = personDTO.getAstrology().getPlanets();
+        houses = personDTO.getAstrology().getHouses();
+        for (Planet planet : planets) {
+            Map<String, Object> tableChartMap = new HashMap<>();
+            tableChartMap.put("planet",planet.getName());
+            tableChartMap.put("zodiac",planet.getPosition());
+            for(House house: houses){
+                if(house.getPosition().equals(planet.getPosition())){
+                    tableChartMap.put("house",house.getName());
+                }
+            }
+            double degree =(((planet.getLongitude() / 30.0)-Math.floor(planet.getLongitude() / 30.0)) * 30);
+            tableChartMap.put("degree",String.format("%.2f", degree)+"°");
+            planetList.add(tableChartMap);
+        }
+        Gson gson = new Gson();
+        return gson.toJson(planetList);
+    }
+
+    protected String getAstrologyShortDescriptionFromGptResponse(PersonDTO personDTO) throws PersonNotFoundException {
+        Astrology astrology = personDTO.getAstrology();
+        if (!astrology.isShortDescriptionCalculated()) {
+            ResponseEntity<GptResponse> response = gptApiCall(personDTO);
+            assert response != null;
+            astrology.setShortDescription(Objects.requireNonNull(response.getBody()).getChoices().get(0).getMessage().getContent());
+            personRepository.updatePersonAstrology(personDTO.getId(), astrology);
+        }
+        return astrology.getShortDescription();
+    }
+
+    private ResponseEntity<GptResponse> gptApiCall(PersonDTO personDTO){
+        RestTemplate restTemplate = new RestTemplate();
+        String apiUrl = "https://api.openai.com/v1/chat/completions";
+        String apiKey = gptApiKey;
+        String model = "gpt-3.5-turbo";
+        String systemRole1 = "Você é um usuário solicitando uma análise do seguinte mapa astral:";
+        String userRole1 = getTableChartFromPerson(personDTO);
+        String systemRole2 = "Por favor, forneça uma análise detalhada do mapa astral, limitando a resposta a 150 palavras.";
+        int maxTokens = 150;
+
+        String requestBody = "{\"model\": \"" + model + "\", \"max_tokens\": " + maxTokens + ", \"messages\": [" +
+                "{\"role\": \"system\", \"content\": \"" + systemRole1 + "\"}," +
+                "{\"role\": \"user\", \"content\": \"" + userRole1 + "\"}," +
+                "{\"role\": \"system\", \"content\": \"" + systemRole2 + "\"}" +
+                "]}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<GptResponse> responseEntity = restTemplate.postForEntity(apiUrl, requestEntity, GptResponse.class);
+        HttpStatus statusCode = responseEntity.getStatusCode();
+        if (statusCode == HttpStatus.OK) {
+            return responseEntity;
+        } else {
+            System.out.println("Falha na chamada à API. Código de status: " + statusCode);
+            return null;
+        }
+
+    }
+
+
+
+
 }
 

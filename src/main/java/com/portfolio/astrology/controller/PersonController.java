@@ -26,7 +26,7 @@ public class PersonController {
 
     PersonService personService;
     AstrologyService astrologyService;
-    private HttpServletRequest request;
+
 
     @GetMapping
     public List<Person> listAllPeople(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
@@ -46,7 +46,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
+    public String getZodiacChart(@PathVariable("name") String name, @RequestBody HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 
@@ -65,5 +65,10 @@ public class PersonController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponseDTO deletePersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.deletePersonById(id, request);
+    }
+
+    @PostMapping("/id")
+    public String getAstrologyShortDescription(@PathVariable("id") Long id, HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
+        return personService.getAstrologyShortDescription(id, request);
     }
 }
