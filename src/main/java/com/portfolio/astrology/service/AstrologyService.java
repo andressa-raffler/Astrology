@@ -30,21 +30,22 @@ public class AstrologyService {
     @Value("${apiKey}")
     private String apiKey;
 
-    public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute, String queryLocation,
-                                    int houses) {
-
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<AstrologyResponse> response = restTemplate.getForEntity(
-                "https://api.astrologico.org/v1/chart?localdate=" +
-                        birthDay + "|" + birthMonth + "|" +
-                        birthYear + "|" + birthHour +
-                        "|" + birthMinute + "&querylocation=" + queryLocation +
-                        "&houses=" + houses + "&key="+apiKey,
-                AstrologyResponse.class);
+    public Astrology getChartByDate(int birthYear, int birthMonth, int birthDay, int birthHour, int birthMinute,
+                                    String queryLocation, int houses) {
+        ResponseEntity<AstrologyResponse> response = apiAstrologicoCall(birthYear, birthMonth, birthDay, birthHour,
+                                                                        birthMinute, queryLocation, houses);
         return getAstrologyFromAstrologyResponse(Objects.requireNonNull(response.getBody()));
-
     }
+
+    private ResponseEntity<AstrologyResponse> apiAstrologicoCall(int birthYear, int birthMonth, int birthDay,
+                                                                 int birthHour, int birthMinute, String queryLocation,
+                                                                 int houses){
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForEntity("https://api.astrologico.org/v1/chart?localdate=" + birthDay + "|"
+                        + birthMonth + "|" + birthYear + "|" + birthHour + "|" + birthMinute + "&querylocation="
+                        + queryLocation + "&houses=" + houses + "&key="+apiKey, AstrologyResponse.class);
+    }
+
 
     private Astrology getAstrologyFromAstrologyResponse(AstrologyResponse astrologyResponse) {
         Astrology astrology = new Astrology();
