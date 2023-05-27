@@ -4,6 +4,7 @@ package com.portfolio.astrology.service;
 import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
+import com.portfolio.astrology.dto.response.tableChartFromPersonResponse.TableChartFromPersonDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.mapper.PersonMapper;
@@ -41,11 +42,12 @@ public class PersonService {
                 User user = userMapper.toModel(getUserDTOFromToken(request));
                 user.addToUsers(personToSave);
                 personToSave.setUser(user);
+                personToSave.getAstrology().setShortDescription( astrologyService.getAstrologyShortDescriptionFromGptResponse(personMapper.toDTO(personToSave)));
                 Long idSavedPerson = saveAndFlushPerson(personToSave);
                 return createMessageResponse("Person with id " + idSavedPerson + " was created!");
             }
             return listOfViolationsMessageResponseDTO;
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | PersonNotFoundException e) {
             return createMessageResponse("New person can't be saved");
         }
     }
@@ -85,6 +87,7 @@ public class PersonService {
                 savedPerson.setCity(updatedPerson.getCity());
                 savedPerson.setState(updatedPerson.getState());
                 savedPerson.setAstrology(getAstrologyApiPath(updatedPerson));
+                astrologyService.saveAstrologyShortDescription(personMapper.toDTO(savedPerson));
                 Long idUpdatedPerson = saveAndFlushPerson(savedPerson);
                 return createMessageResponse("Person with id " + idUpdatedPerson + " was updated!");
             }
@@ -121,15 +124,15 @@ public class PersonService {
         List<Person> allPeoleByUser = getUsersPeopleFromRequest(request);
         List<String> allChartsByUser = new ArrayList<>();
         for (Person person : allPeoleByUser ) {
-            String chart =  getZodiacChart(person.getName(), request);
+            String chart =  getZodiacChart(person.getName(), request).toString();
             allChartsByUser.add(chart);
         }
         return allChartsByUser;
     }
 
-    public String getZodiacChart(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+    public TableChartFromPersonDTO getZodiacChart(String personName, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         Person personSaved = getPersonFromUser(personName, request);
-        return astrologyService.getTableChartFromPerson(personMapper.toDTO(personSaved));
+        return astrologyService.getTableChartWithShortDescriptionFromPerson(personMapper.toDTO(personSaved));
     }
 
 

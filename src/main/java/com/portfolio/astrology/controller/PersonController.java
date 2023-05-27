@@ -3,6 +3,7 @@ package com.portfolio.astrology.controller;
 
 import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
+import com.portfolio.astrology.dto.response.tableChartFromPersonResponse.TableChartFromPersonDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.model.Person;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -46,7 +48,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public String getZodiacChart(@PathVariable("name") String name, @RequestBody HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
+    public TableChartFromPersonDTO getZodiacChart(@PathVariable("name") String name, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 

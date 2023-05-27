@@ -1,4 +1,5 @@
 const table = document.getElementById("planets");
+const descriptionParagraph = document.getElementById("short_description");
 let person_name;
 person_name = window.localStorage.getItem("chart_person_name");
 window.localStorage.removeItem("chart_person_name");
@@ -20,8 +21,8 @@ async function loadChart(API_URL, authToken, person_name) {
 
     if (response.ok) {
       const data = await response.json();
-      const planets = data;
-      console.log(Array.isArray(planets));
+      const planets = data.htmlRowList;
+      const short_description = data.shortDescription
 
       // Create table header row
       let headerRow = document.createElement("tr");
@@ -32,7 +33,7 @@ async function loadChart(API_URL, authToken, person_name) {
 
       planetHeader.innerHTML = "Planet";
       zodiacHeader.innerHTML = "Zodiac";
-      houseHeader.innerHTML = "House";
+      houseHeader.innerHTML =  "House";
       degreeHeader.innerHTML = "Degree";
 
       headerRow.appendChild(planetHeader);
