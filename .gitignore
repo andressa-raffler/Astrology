@@ -16,7 +16,7 @@ target/
 .sts4-cache
 
 ### API KEY ###
-env.properties
+src/main/resources/env.properties
 
 ### IntelliJ IDEA ###
 .idea

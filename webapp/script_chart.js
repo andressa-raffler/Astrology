@@ -1,16 +1,15 @@
 const table = document.getElementById("planets");
 const descriptionParagraph = document.getElementById("short_description");
-let person_name;
-person_name = window.localStorage.getItem("chart_person_name");
+const personName = window.localStorage.getItem("chart_person_name");
 window.localStorage.removeItem("chart_person_name");
 const API_URL = "http://localhost:9090/astrology/v1/user/person/zodiac-chart";
 const authToken = window.localStorage.getItem("token");
 
-loadChart(API_URL, authToken, person_name);
+loadChart(API_URL, authToken, personName);
 
-async function loadChart(API_URL, authToken, person_name) {
+async function loadChart(API_URL, authToken, personName) {
   try {
-    const response = await fetch(API_URL + "/" + person_name, {
+    const response = await fetch(API_URL + "/" + personName, {
       method: "GET",
       headers: {
         Authorization: authToken,
@@ -22,8 +21,11 @@ async function loadChart(API_URL, authToken, person_name) {
     if (response.ok) {
       const data = await response.json();
       const planets = data.htmlRowList;
-      const short_description = data.shortDescription
+      const short_description = data.shortDescription;
 
+      document.querySelector('#person_name').textContent = personName;
+      document.querySelector('#short_description').textContent = short_description;
+    
       // Create table header row
       let headerRow = document.createElement("tr");
       let planetHeader = document.createElement("th");

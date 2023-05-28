@@ -38,8 +38,9 @@ body {
 .container__box{
     text-align: center; 
     margin: 1em 0 2em 0; /* cima, direita, baixo, esquerda */
-    
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .button__box{
