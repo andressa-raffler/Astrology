@@ -1,22 +1,26 @@
 package com.portfolio.astrology.service;
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.response.tableChartFromPersonResponse.HTMLRow;
 import com.portfolio.astrology.dto.response.tableChartFromPersonResponse.TableChartFromPersonDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.PersonRepository;
+import com.portfolio.astrology.request.gpt.Message;
+import com.portfolio.astrology.request.gpt.RequestBody;
 import com.portfolio.astrology.response.astrology.AstrologyResponse;
 import com.portfolio.astrology.response.gpt.GptResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -265,9 +269,6 @@ public class AstrologyService {
 
     protected TableChartFromPersonDTO getTableChartWithShortDescriptionFromPerson(PersonDTO personDTO) {
         TableChartFromPersonDTO tableChartFromPerson = getTableChartFromPerson(personDTO);
-      //  Map<String, Object> descriptionMap = new HashMap<>();
-      //  descriptionMap.put("shortDescription", personDTO.getAstrology().getShortDescription() );
-      //  tableChartFromPerson.add(descriptionMap);
         tableChartFromPerson.setShortDescription(personDTO.getAstrology().getShortDescription());
         return tableChartFromPerson;
     }
@@ -275,38 +276,24 @@ public class AstrologyService {
 
     protected TableChartFromPersonDTO getTableChartFromPerson(PersonDTO personDTO) {
         TableChartFromPersonDTO tableChartFromPersonDTO = new TableChartFromPersonDTO();
-//        List<Map<String, Object>> planetList = new ArrayList<>();
-        List<Planet> planets = new ArrayList<>();
-        List<House> houses = new ArrayList<>();
-//        List<String> description = new ArrayList<>();
+        List<Planet> planets;
+        List<House> houses;
         planets = personDTO.getAstrology().getPlanets();
         houses = personDTO.getAstrology().getHouses();
         for (Planet planet : planets) {
-//            Map<String, Object> tableChartMap = new HashMap<>();
-//            tableChartMap.put("planet", planet.getName());
-//            tableChartMap.put("zodiac", planet.getPosition());
             HTMLRow htmlRow = new HTMLRow();
             htmlRow.setPlanet(planet.getName());
             htmlRow.setZodiac(planet.getPosition());
             for (House house : houses) {
                 if (house.getPosition().equals(planet.getPosition())) {
-//                    tableChartMap.put("house", house.getName());
                     htmlRow.setHouse(house.getName());
                 }
             }
             double degree = (((planet.getLongitude() / 30.0) - Math.floor(planet.getLongitude() / 30.0)) * 30);
-//            tableChartMap.put("degree", String.format("%.2f", degree));
-//            planetList.add(tableChartMap);
             htmlRow.setDegree(String.format("%.2f", degree));
             tableChartFromPersonDTO.getHtmlRowList().add(htmlRow);
         }
         return tableChartFromPersonDTO;
-
-        // planetas: Lista<map<string,object>>
-        // shortDescription: map<string,object>>
-
-
-
     }
 
     protected void saveAstrologyShortDescription(PersonDTO personDTO) throws PersonNotFoundException{
@@ -333,20 +320,23 @@ public class AstrologyService {
         String apiKey = gptApiKey;
         String model = "gpt-3.5-turbo";
         String systemRole1 = "Você é um usuário solicitando uma análise do seguinte mapa astral:";
-        String userRole1 = getTableChartFromPerson(personDTO).toJsonString();
-        String systemRole2 = "Forneça uma análise detalhada e resumida do mapa astral";
-        int maxTokens = 150;
+        String userRole1 = getTableChartFromPerson(personDTO).toString();
+        String systemRole2 = "Seja resumido e direto ao ponto, fale dos somente dos principais aspectos, responda tratando o usuário por voce ";
+        int maxTokens = 300;
 
-        String requestBody = "{\"model\": \"" + model + "\", \"max_tokens\": " + maxTokens + ", \"messages\": [" +
-                "{\"role\": \"system\", \"content\": \"" + systemRole1 + "\"}," +
-                "{\"role\": \"user\", \"content\": \"" + userRole1 + "\"}," +
-                "{\"role\": \"system\", \"content\": \"" + systemRole2 + "\"}" +
-                "]}";
 
+        Message message1 = new Message("system", systemRole1);
+        Message message2 = new Message("user", userRole1);
+        Message message3 = new Message("system", systemRole2);
+        List<Message> messages = Arrays.asList(message1, message2, message3);
+
+        RequestBody requestBody = new RequestBody(model, maxTokens, messages);
+        Gson gson = new Gson();
+        String json = gson.toJson(requestBody);
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(apiKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<GptResponse> responseEntity = restTemplate.postForEntity(apiUrl, requestEntity, GptResponse.class);
         HttpStatus statusCode = responseEntity.getStatusCode();
         if (statusCode == HttpStatus.OK) {
