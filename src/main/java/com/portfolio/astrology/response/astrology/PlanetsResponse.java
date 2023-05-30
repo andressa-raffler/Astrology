@@ -1,4 +1,4 @@
-package com.portfolio.astrology.response;
+package com.portfolio.astrology.response.astrology;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

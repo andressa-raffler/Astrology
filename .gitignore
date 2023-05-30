@@ -15,6 +15,9 @@ target/
 .springBeans
 .sts4-cache
 
+### API KEY ###
+src/main/resources/env.properties
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -32,4 +35,5 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
+/webapp/.vscode/
 .vscode/

@@ -3,6 +3,7 @@ package com.portfolio.astrology.controller;
 
 import com.portfolio.astrology.dto.request.PersonDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
+import com.portfolio.astrology.dto.response.tableChartFromPersonResponse.TableChartFromPersonDTO;
 import com.portfolio.astrology.exception.PersonNotFoundException;
 import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.model.Person;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -26,7 +28,7 @@ public class PersonController {
 
     PersonService personService;
     AstrologyService astrologyService;
-    private HttpServletRequest request;
+
 
     @GetMapping
     public List<Person> listAllPeople(HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
@@ -46,7 +48,7 @@ public class PersonController {
     }
 
     @GetMapping("/zodiac-chart/{name}")
-    public List<Object> getZodiacChart(@PathVariable("name") String name) throws PersonNotFoundException, UserNotFoundException {
+    public TableChartFromPersonDTO getZodiacChart(@PathVariable("name") String name, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
        return personService.getZodiacChart(name, request);
     }
 
@@ -65,5 +67,10 @@ public class PersonController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponseDTO deletePersonById(@PathVariable("id") Long id, HttpServletRequest request) throws PersonNotFoundException, UserNotFoundException {
         return personService.deletePersonById(id, request);
+    }
+
+    @PostMapping("/id")
+    public String getAstrologyShortDescription(@PathVariable("id") Long id, HttpServletRequest request) throws UserNotFoundException, PersonNotFoundException {
+        return personService.getAstrologyShortDescription(id, request);
     }
 }

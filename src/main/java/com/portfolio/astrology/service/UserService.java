@@ -54,7 +54,6 @@ public class UserService {
                 catch(Exception e ){
                         return createMessageResponse("Error creating new user");
                 }
-
         }
 
         private Long saveAndFlushPerson(User userToSave) {

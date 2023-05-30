@@ -1,10 +1,7 @@
-package com.portfolio.astrology.response;
+package com.portfolio.astrology.response.astrology;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-
-import java.io.Serializable;
 
 
 @Data

@@ -20,6 +20,8 @@ public class Astrology implements Serializable {
     @SequenceGenerator(name = "astrology_seq", sequenceName = "astrology_seq", allocationSize = 1)
     private Long id;
 
+    @Column
+    private String shortDescription = "";
 
     @OneToMany(mappedBy = "astrology", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Planet> planets = new ArrayList<>();
@@ -43,4 +45,6 @@ public class Astrology implements Serializable {
         house.setAstrology(this);
         this.houses.add(house);
     }
+
+
 }

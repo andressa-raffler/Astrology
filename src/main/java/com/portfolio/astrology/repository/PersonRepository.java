@@ -1,5 +1,7 @@
 package com.portfolio.astrology.repository;
 
+import com.portfolio.astrology.exception.PersonNotFoundException;
+import com.portfolio.astrology.model.Astrology;
 import com.portfolio.astrology.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +24,11 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Collection<Person> findAllPersonFromOneUser(String email);
 
 
+    default void updatePersonAstrology(Long persoId, Astrology astrology) throws PersonNotFoundException {
+        Person person = findById(persoId).orElseThrow(() -> new PersonNotFoundException("Person not found"));
+        person.setAstrology(astrology);
+        saveAndFlush(person);
+    }
 
 
 
