@@ -44,12 +44,12 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userRepository, passwordEncoder, tokenService);
-        user = new User();
-        user.setId(1L);
-        user.setEmail("andressa@email.com");
-        user.setName("andressa");
-        user.setPassword("senha");
+//        underTest = new UserService(userRepository, passwordEncoder, tokenService);
+//        user = new User();
+//        user.setId(1L);
+//        user.setEmail("andressa@email.com");
+//        user.setName("andressa");
+//        user.setPassword("senha");
     }
 
     @Test

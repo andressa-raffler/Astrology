@@ -200,3 +200,23 @@ h3{
     margin: 20px 0;
   }
   
+  .loading {
+    display: none;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    border: 5px solid var(--green-primary);
+    border-top: 5px solid var(--green-secundary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

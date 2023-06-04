@@ -40,7 +40,6 @@ public class TokenService {
 
         return PREFIX + token;
     }
-
     private  boolean validExpiration(Date expiration) {
         return expiration.after(new Date(System.currentTimeMillis()));
     }

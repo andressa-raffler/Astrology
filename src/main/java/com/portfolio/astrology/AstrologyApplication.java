@@ -1,5 +1,6 @@
 package com.portfolio.astrology;
 
+import com.portfolio.astrology.service.StartIdSequence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

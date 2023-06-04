@@ -1,4 +1,4 @@
-package com.portfolio.astrology;
+package com.portfolio.astrology.service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

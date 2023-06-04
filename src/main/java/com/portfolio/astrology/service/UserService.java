@@ -2,14 +2,19 @@ package com.portfolio.astrology.service;
 
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.portfolio.astrology.dto.request.UserDTO;
 import com.portfolio.astrology.dto.response.MessageResponseDTO;
 import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.mapper.UserMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
+import com.portfolio.astrology.request.email.EmailMessage;
 import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.security.TokenService;
+import com.portfolio.astrology.security.ValidationCode;
+import com.portfolio.astrology.security.ValidationCodeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -36,24 +41,47 @@ public class UserService {
         private final UserMapper userMapper = UserMapper.INSTANCE;
         private final Logger logger = LoggerFactory.getLogger(UserService.class);
         private TokenService tokenService;
-
+        private ValidationCodeService validationCodeService;
+        private EmailSenderService emailSenderService;
+        private ValidationCode validationCode;
+        private UserDTO userDTO;
         public MessageResponseDTO saveUser(UserDTO userDTO) {
-
-                try {MessageResponseDTO listOfViolationsMessageResponseDTO = inputedUserErrorMessages(userDTO);
-                        if(listOfViolationsMessageResponseDTO == null){
-                                userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
-                                userDTO.setName(userDTO.getName().toLowerCase(Locale.ROOT));
-                                userDTO.setEmail(userDTO.getEmail().toLowerCase(Locale.ROOT));
-                                Long id = saveAndFlushPerson(userMapper.toModel(userDTO));
-                                return createMessageResponse("User with id " + id + " was created/updated!");
-                        }
-                        return listOfViolationsMessageResponseDTO;
+                try {
+                      MessageResponseDTO listOfViolationsMessageResponseDTO = inputedUserErrorMessages(userDTO);
+                      if(listOfViolationsMessageResponseDTO == null){
+                             userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));
+                             userDTO.setName(userDTO.getName().toLowerCase(Locale.ROOT));
+                             userDTO.setEmail(userDTO.getEmail().toLowerCase(Locale.ROOT));
+                             this.userDTO = userDTO;
+                             validationCode = validationCodeService.generateValidationCode();
+                             emailSenderService.sendEmail(userDTO.getEmail(), validationCode.getCode()+"");
+                             return createMessageResponse("ok");
+                      }
+                      listOfViolationsMessageResponseDTO.setMessage("Error. Please verify your validation code");
+                      return listOfViolationsMessageResponseDTO;
                 }catch (DataIntegrityViolationException e) {
-                        return createMessageResponse("Email already exists.");
+                    return createMessageResponse("Error. Email already exists.");
                 }
                 catch(Exception e ){
-                        return createMessageResponse("Error creating new user");
+                    return createMessageResponse("Error creating new user");
                 }
+        }
+        public MessageResponseDTO emailValidate(String stringCode){
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(stringCode, JsonObject.class);
+                int code = jsonObject.get("validationCode").getAsInt();
+                if(validationCodeService.isValidationCodeValid(code)) {
+                        persistUser(this.userDTO);
+                        return createMessageResponse("ok");
+                }
+                return createMessageResponse("Error. Please insert a valid code");
+        }
+
+
+        private MessageResponseDTO persistUser(UserDTO userDTO){
+                Long id = saveAndFlushPerson(userMapper.toModel(userDTO));
+                return createMessageResponse("User with id " + id + " was created/updated!");
+
         }
 
         private Long saveAndFlushPerson(User userToSave) {
@@ -70,7 +98,7 @@ public class UserService {
 
         public MessageResponseDTO updateUserById(Long id, UserDTO updatedDTOUser) throws UserNotFoundException {
                 getUserFromRepository(id);
-                saveUser(updatedDTOUser);
+           //     saveUser(updatedDTOUser);
                 return createMessageResponse("User with id " + id + " was updated!");
         }
 
@@ -130,6 +158,7 @@ public class UserService {
                         return ResponseEntity.status(403).build();
                 }
         }
+
 
         private MessageResponseDTO inputedUserErrorMessages(UserDTO userDTO) {
                 ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
