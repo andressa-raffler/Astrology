@@ -10,7 +10,6 @@ import com.portfolio.astrology.exception.UserNotFoundException;
 import com.portfolio.astrology.mapper.UserMapper;
 import com.portfolio.astrology.model.*;
 import com.portfolio.astrology.repository.UserRepository;
-import com.portfolio.astrology.request.email.EmailMessage;
 import com.portfolio.astrology.security.Token;
 import com.portfolio.astrology.security.TokenService;
 import com.portfolio.astrology.security.ValidationCode;
@@ -46,7 +45,9 @@ public class UserService {
         private ValidationCode validationCode;
         private UserDTO userDTO;
         public MessageResponseDTO saveUser(UserDTO userDTO) {
-                try {
+                try { if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+                        throw new DataIntegrityViolationException("Error. Email already registered.");
+                }
                       MessageResponseDTO listOfViolationsMessageResponseDTO = inputedUserErrorMessages(userDTO);
                       if(listOfViolationsMessageResponseDTO == null){
                              userDTO.setPassword(generatePasswordEncoder(userDTO.getPassword()));

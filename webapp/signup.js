@@ -5,6 +5,7 @@ class SignUpForm {
       this.validationButton = document.getElementById('sendValidationCode');
       this.modal = document.getElementById('modal');
       this.closeButton = this.modal.querySelector('.close');
+      this.cancelButton = document.getElementById('cancel');
       this.inputName = document.querySelector('.name');
       this.inputEmail = document.querySelector('.email');
       this.inputPassword = document.querySelector('.password');
@@ -13,6 +14,8 @@ class SignUpForm {
       this.signUpButton.addEventListener('click', this.signUp.bind(this));
       this.validationButton.addEventListener('click', this.sendValidationCode.bind(this));
       this.closeButton.addEventListener('click', this.closeModal.bind(this));
+      this.cancelButton.addEventListener('click', this.closeModal.bind(this));
+      
     }
   
     signUp(event) {
@@ -65,6 +68,7 @@ class SignUpForm {
           } else {
             const errorElement = document.createElement('p');
             errorElement.textContent = data.message;
+            errorElement.classList.add('error'); 
             const modalContent = document.querySelector('.modal-content');
             modalContent.appendChild(errorElement);
           }
@@ -82,7 +86,11 @@ class SignUpForm {
       document.getElementById('modal').classList.remove('active')
       this.inputValidationCode.value = '';
       const modalContent = document.querySelector('.modal-content');
-      modalContent.innerHTML = '';
+      const errorElements = modalContent.querySelectorAll('p.error');
+
+      errorElements.forEach(element => {
+        element.remove();
+      });
     }
   }
   
