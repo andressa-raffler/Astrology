@@ -82,11 +82,23 @@
     box-shadow: 1px 1px 10px black;
 }
 
+.modal-content-light {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 50vw;
+    max-height: 30vh; /* Defina um valor máximo para a altura do modal */
+    overflow-y: auto; /* Adicione um scroll caso o conteúdo seja maior que a altura do modal */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 1px 1px 10px black;
+  }
+
 
 .modal-header{
     display: flex;
     position: relative;
-    justify-content: center;
+    width: 40px;
     height: 40px;
     line-height: 40px;
     font-size: 1rem;
@@ -117,6 +129,14 @@
     padding: 0 20px;
 }
 
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 0 5px;
+  }
+
 .modal-field{
     width: calc(50% - 10px);
     height: 40px;
@@ -125,6 +145,17 @@
     box-shadow: 0 0 2px black;
     padding: 0 10px;
     font-size:1rem;
+}
+
+.modal-field-light{
+    width: 100%;
+    height: 40px;
+    outline-style: none;
+    border-style: none;
+    box-shadow: 0 0 2px black;
+    padding: 0 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
 .modal-field:focus{

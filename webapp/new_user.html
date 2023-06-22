@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/records.css">
+    <link rel="stylesheet" href="css/modal.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <script src="script_new_user.js" defer></script>
+    <script src="signup.js" defer></script>
     <title>Raffler Astrology</title>
 </head>
 <body>
@@ -16,14 +20,27 @@
             <div class="container__box">
                 <h1 class="container__title">Raffler Astrology</h1>
                 <h2 class="secundary__title">New User</h2>
-                <form class = "container__new_user" action="">
+                <form class = "container__new_user" >
                     <input type="text" class="name" name="name" placeholder="Name">
                     <input type="text" class="email" name="email" placeholder="Email">
                     <input type="password" class="password" name="password" placeholder="Password">
-                    <button id="signUp" class = "btn">Sign Up</button>
+                    <button id="signUp" class = "signUp btn">Sign Up</button>
                     <a class="small__title" href="/login.html">Go to Login page</a>
                 </form>
             </div>  
     </section>
+    <div id="modal" class="modal-form modal">
+        <div class="modal-content-light">
+            <header class="modal-header">
+                <span class="modal-close close">&times;</span>
+            </header>
+            <h3>Please check your e-mail and input your validation code</h3>
+            <input type="number" class="validationCode modal-field-light"  id="validationCode" placeholder="Validation Code">
+            <div class="modal-buttons">
+                <button id="sendValidationCode" class="button green validationCode">Validate</button>
+                <button id="cancel" class="close button red">Cancel</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

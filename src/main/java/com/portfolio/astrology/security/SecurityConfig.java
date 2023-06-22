@@ -36,7 +36,7 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable() //CSRF é uma segurança para hackers, autenticaçao via token ja esta protegida
                         .authorizeHttpRequests()
-                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/singn-up", "/astrology/v1/user/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/astrology/v1/user/sign-up", "/astrology/v1/user/login", "/astrology/v1/user/email_validate").permitAll()
                         .anyRequest().authenticated().and().cors() //o cors permite que eu acesse a api por requisiçoes externas
                         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Spring nao deve criar uma sessao
                         .and().addFilterBefore(new SecurityFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

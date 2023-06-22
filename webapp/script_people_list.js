@@ -159,17 +159,11 @@ async function openEditModal(id, name, birthdate, birthHour, birthMinute, city, 
   document.getElementById("state").value = state;
   window.localStorage.setItem('edited_person_id', id);
 
-  // Obter o ID do estado selecionado
   const stateId = stateSelectElement.value;
 
   if (stateId) {
-    // Obter a lista de cidades do estado correspondente
     const cities = await getCities(stateId);
-
-    // Preencher o dropdown de cidades
     updateCitiesDropdown(cities);
-
-    // Selecionar a cidade correspondente
     const citySelectElement = document.getElementById('city');
     citySelectElement.value = city;
   }
@@ -181,8 +175,6 @@ async function editPerson() {
   const personId = window.localStorage.getItem('edited_person_id');
   const stateId = stateSelectElement.value;
   const cityName = document.getElementById("city").value;
-
-  // Obter o ID da cidade a partir do nome e do ID do estado
   const cityId = await getCityIdByName(cityName, stateId);
 
   if (stateId && cityId) {
@@ -191,8 +183,8 @@ async function editPerson() {
       birthDate: document.getElementById("id_birth_date").value,
       birthHour: document.getElementById("id_birth_hour").value,
       birthMinute: document.getElementById("id_birth_minute").value,
-      city: cityId, // Use o ID da cidade obtido
-      state: stateId, // Use o ID do estado obtido
+      city: cityId, 
+      state: stateId,
     };
 
     sendEditRequest(personId, requestBody).then((data) => {
@@ -236,7 +228,6 @@ function openChart(name){
   window.location.pathname = "/chart.html"
 }
 
-// Function to get one list of states from IBGE API
 async function getStates() {
   const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
   const data = await response.json();
@@ -254,27 +245,24 @@ async function createStatesDropdown() {
   });
 }
 
-// Function to get the cities of a state
 async function getCities(stateId) {
   const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateId}/municipios`);
   const data = await response.json();
   return data;
 }
 
-// Function to update the cities in the dropdown list
 function updateCitiesDropdown(cities) {
   const selectElement = document.getElementById('city');
-  selectElement.innerHTML = ''; // Clear previous options
+  selectElement.innerHTML = '';
 
   cities.forEach(city => {
     const optionElement = document.createElement('option');
-    optionElement.value = city.nome; // Set the value to city ID
+    optionElement.value = city.nome; 
     optionElement.textContent = city.nome;
     selectElement.appendChild(optionElement);
   });
 }
 
-// Event to update the cities when the state is changed
 stateSelectElement.addEventListener('change', async () => {
   const stateId = stateSelectElement.value;
   const cities = await getCities(stateId);

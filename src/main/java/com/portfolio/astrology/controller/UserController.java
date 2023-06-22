@@ -41,10 +41,16 @@ public class UserController {
         return userService.listAllUsers();
     }
 
-    @PostMapping("/singn-up")
+    @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO saveNewUser( @RequestBody UserDTO userDTO) {
+    public MessageResponseDTO saveNewUser(@RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
+    }
+
+    @PostMapping("/email_validate")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageResponseDTO validateEmail(@RequestBody String validationCode){
+        return userService.emailValidate(validationCode);
     }
 
     @PutMapping("/{id}")
